@@ -82,6 +82,133 @@ label.error {
 .modal-loader .img-loader {
     margin: 0 auto;
 }
+/*slider*/
+.horizontal-slider {
+    margin: 60px 0 20px;
+}
+.horizontal-slider .noUi-connect {
+    -webkit-transition: none;
+            transition: none;
+}
+.horizontal-slider .noUi-horizontal {
+    padding-right: 32px;
+    height: 32px;
+}
+.horizontal-slider .noUi-horizontal .noUi-handle {
+    left: -1px;
+    box-shadow: none;
+}
+.horizontal-slider .noUi-horizontal .noUi-origin  {
+    right: -32px;
+}
+.horizontal-slider .noUi-handle-lower .noUi-tooltip {
+    top: -52px;
+    border-radius: 9px
+}
+.horizontal-slider .noUi-target {
+    box-shadow: none;
+    border: 0 none;
+    border-radius: 16px;
+}
+.horizontal-slider .noUi-tooltip {
+    width: 160px;
+    left: -20px;
+    border: 0 none;
+    background: #183152;
+    color: #fff;
+}
+.horizontal-slider .noUi-tooltip:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 12px 11px 0;
+    border-color: #183152 transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    bottom: -10px;
+    left: 20px;
+}
+.red .horizontal-slider .noUi-tooltip {
+    left: auto;
+    right: -20px;
+}
+.red .horizontal-slider .noUi-tooltip:after {
+    left: auto;
+    right: 20px;
+}
+.horizontal-slider .noUi-connect {
+    background: #183152;
+}
+.light-green .horizontal-slider .noUi-tooltip,
+.light-green .horizontal-slider .noUi-connect {
+    background: #93db24;
+}
+.light-green .horizontal-slider .noUi-tooltip:after {
+    border-color: #93db24 transparent;
+}
+.light-green .horizontal-slider .noUi-handle.noUi-handle-lower {
+    border-color: #93db24;
+}
+.dark-green .horizontal-slider .noUi-tooltip,
+.dark-green .horizontal-slider .noUi-connect {
+    background: #80bd21;
+}
+.dark-green .horizontal-slider .noUi-tooltip:after {
+    border-color: #80bd21 transparent;
+}
+.dark-green .horizontal-slider .noUi-handle.noUi-handle-lower {
+    border-color: #80bd21;
+}
+.yellow .horizontal-slider .noUi-tooltip,
+.yellow .horizontal-slider .noUi-connect {
+    background: #ffac0d;
+}
+.yellow .horizontal-slider .noUi-tooltip:after {
+    border-color: #ffac0d transparent;
+}
+.yellow .horizontal-slider .noUi-handle.noUi-handle-lower {
+    border-color: #ffac0d;
+}
+.orange .horizontal-slider .noUi-tooltip,
+.orange .horizontal-slider .noUi-connect {
+    background: #f26321;
+}
+.orange .horizontal-slider .noUi-tooltip:after {
+    border-color: #f26321 transparent;
+}
+.orange .horizontal-slider .noUi-handle.noUi-handle-lower {
+    border-color: #f26321;
+}
+.red .horizontal-slider .noUi-tooltip,
+.red .horizontal-slider .noUi-connect {
+    background: #FF2D0D;
+}
+.red .horizontal-slider .noUi-tooltip:after {
+    border-color: #FF2D0D transparent;
+}
+.red .horizontal-slider .noUi-handle.noUi-handle-lower {
+    border-color: #FF2D0D;
+}
+.horizontal-slider .noUi-origin {
+    border-radius: 0 9px 9px 0;
+    background: #eee;
+}
+.horizontal-slider .noUi-handle.noUi-handle-lower {
+    background: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    top: 0px;
+    border: 6px solid #183152;
+}
+.horizontal-slider .noUi-handle.noUi-handle-lower:before,
+.horizontal-slider .noUi-handle.noUi-handle-lower:after {
+    display: none;
+}
+.horizontal-slider .noUi-origin {
+    border-radius: 16px;
+}
 /*helper*/
 .no-margin {
     margin: 0 !important;
