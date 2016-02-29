@@ -22,7 +22,7 @@
             },
             "callbackOnHide"     : {
                 "type"           : "infoModal",
-                "arguments"      : ["Congratulation! You successfull fill the zip code!", 3000]
+                "arguments"      : ["Congratulation! You successfull fill the zip code!", 2000]
             }
         },
         {
