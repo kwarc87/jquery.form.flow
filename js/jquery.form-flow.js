@@ -14,6 +14,7 @@
     formFlowObj.prototype = {
         //parse JSON with form flow and logic
         init: function()  {
+            var plugin = this;
             $.getJSON( plugin.settings.jsonPath, function(data) {
                 plugin.formFlowJSON = data;
                 for (var i=0; i < data.steps.length; i++) {
@@ -163,6 +164,9 @@
         },
         destroy: function() {
             var plugin = this;
+            var $element = plugin.$element;
+            plugin.unbindEvents();
+            plugin.$element.data('plugin_formFlow', null);
         }
     }
     var settings = {
@@ -207,6 +211,7 @@
         return this.each(function () {
             if ( ! $.data( this, 'plugin_formFlow' ) ) {
                 var obj = new settings.constructor(this, methodOrOptions);
+                obj.init();
                 $.data(this, 'plugin_formFlow', obj);
             } else if (typeof methodOrOptions === 'object') {
                 $.error('jQuery.formFlow already initialized');
