@@ -1,4 +1,16 @@
 {
+    "init": [
+        {
+            "type": "initSlider"
+        },
+        {
+            "type": "initAddressIntegration"
+        }
+    ],
+    "beforeSubmit": {
+        "type": "showLoader",
+        "arguments": [3000]
+    },
     "steps":  [
         {
             "type"               : "required",
@@ -107,9 +119,5 @@
                 }
             }
         }
-    ],
-    "beforeSubmit": {
-        "type": "showLoader",
-        "arguments": [3000]
-    }
+    ]
 }

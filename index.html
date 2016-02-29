@@ -361,67 +361,8 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $("#form-example").formFlow({
-                "jsonPath" :                    "data/form-flow.json",
+                "jsonPath" :                    "data/form-flow.json"
             });
-            $("#zip_code").addressIntegration({
-                zipcodeMode:                                true,
-                regionInfluence:                            "US",
-                countrySelector:                            false,
-                countryShortSelector:                       '#country_short',
-                citySelector:                               '#city',
-                stateSelector:                              false,
-                stateShortSelector:                         '#state',
-                postalCodeSelector:                         false,
-                routeSelector:                              false,
-                streetNumberSelector:                       false,
-                loaderSelector:                             '#integrationLoader',
-                messageSelector:                            '#integrationMessage',
-                customErrorMessage:                         'No results for given zip code.',
-                debounceEventsTime:        350,
-                callbackEventFired:        function() {
-                    $("#zip_code").data('status', 'event fired');
-                    $("#next-step-1").attr("disabled", true);
-                },
-                callbackInProgress:        function() {
-                    $("#zip_code").data('status', 'in progress');
-                    $(".next-step-1").attr("disabled", true);
-                },
-                callbackSuccess:           function(results) {
-                    $("#zip_code").data('status', 'success');
-                    $("#zip_code").data('country', $("#country_short").val());
-                    $("#zip_code").valid();
-                    $("#next-step-1").attr("disabled", false);
-                    setProvidersList($("#state").val());
-                },
-                callbackError:             function(errorMessage) {
-                    $("#zip_code").data('status', 'error');
-                    $("#country_short").val("");
-                    $("#zip_code").data('country', $("#country_short").val());
-                    $("#zip_code").valid();
-                    $("#next-step-1").attr("disabled", false);
-                }
-            });
-            //get electricity providers list
-            function setProvidersList(state) {
-                var url = "data/providers.json"
-                $.ajax({
-                    url         : url,
-                    dataType    : 'json',
-                })
-                .done(function(data) {
-                    var providers = data[state];
-                    if(providers) {
-                        var providersOptions = "<option value=''>-Choose-</option>";
-                        $.each(providers, function( index, value ) {
-                            providersOptions += "<option value='" + value + "'>" + value + "</option>";
-                        });
-                        $("#current_provider").html(providersOptions);
-                    }
-                })
-                .fail(function(data) {
-                    console.log('Electricity providers loading fail.');
-                });
-            }
         });
     </script>
 

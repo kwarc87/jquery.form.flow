@@ -13,7 +13,7 @@
     //methods
     formFlowObj.prototype = {
         //parse JSON with form flow and logic
-        init: function()  {
+        init: function() {
             var plugin = this;
             $.getJSON( plugin.settings.jsonPath, function(data) {
                 plugin.formFlowJSON = data;
@@ -22,6 +22,19 @@
                     plugin.addValidationRules(data.steps[i]);
                 }
                 plugin.bindValidation();
+                if(plugin.formFlowJSON.init) {
+                    if( Object.prototype.toString.call( plugin.formFlowJSON.init ) === '[object Array]' ) {
+                        for (var i=0; i < plugin.formFlowJSON.init.length; i++) {
+                            var functionToCallOnInit = plugin.formFlowJSON.init[i]['type'];
+                            var functionToCallOnInitArguments = plugin.formFlowJSON.init[i]['arguments'];
+                            settings.additionalMethods[functionToCallOnInit].apply(this, functionToCallOnInitArguments);
+                        }
+                    } else {
+                        var functionToCallOnInit = plugin.formFlowJSON.init.type;
+                        var functionToCallOnInitArguments = plugin.formFlowJSON.init.arguments;
+                        settings.additionalMethods[functionToCallOnInit].apply(this, functionToCallOnInitArguments);
+                    }
+                }
             });
         },
         bindNavigate: function(stepNumber, step, steps) {
@@ -46,7 +59,7 @@
                             }
                         }
                     }
-                })
+                });
             } else {
                 //next step bind
                 $(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
@@ -54,14 +67,14 @@
                     if( plugin.valid(step.fieldsToValidate) ) {
                         plugin.checkStep(stepNumber, stepNumber+1, steps);
                     }
-                })
+                });
             }
             //prev step bind
             if(stepNumber > 1) {
                 $(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                     e.preventDefault();
                     plugin.checkStep(stepNumber, stepNumber-1, steps);
-                })
+                });
             }
         },
         checkStep: function(prevStepNumber, nextStepNumber, steps) {
@@ -184,7 +197,35 @@
         },
         additionalMethods: {
             equals: function(element, value) {
-                if( $(element).val() ===  value ) {
+                if( $(element).val() === value ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            biggerThan: function(element, value) {
+                if( $(element).val() > value ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            biggerOrEqualThan: function(element, value) {
+                if( $(element).val() >= value ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            smallerThan: function(element, value) {
+                if( $(element).val() < value ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            smallerOrEqualThan: function(element, value) {
+                if( $(element).val() <= value ) {
                     return true;
                 } else {
                     return false;
@@ -200,7 +241,11 @@
         },
         addMethod: function(methodName, methodBody) {
             settings.additionalMethods[methodName] = methodBody;
-        }
+        },
+        additionalFields: { },
+        addField: function(fieldName, fieldBody) {
+            settings.additionalFields[fieldName] = fieldBody;
+        },
     };
 
     //plugin
