@@ -1,0 +1,127 @@
+{
+    "init":  {
+        "type": "initTooltip"
+    },
+    "steps":  [
+        {
+            "type"               : "required",
+            "fieldsToValidate"   : "#cover_for, #smoker, #partner_smoker, #cover_term, #cover_type",
+            "validationRules"    : {
+                "cover_for" : {
+                    "required":                       true
+                },
+                "smoker" : {
+                    "required":                       true
+                },
+                "partner_smoker" : {
+                    "partnerrequired":                true
+                },
+                "cover_term" : {
+                    "required":                       true
+                },
+                "cover_type" : {
+                    "required":                       true
+                }
+            }
+        },
+        {
+            "type"               : "required",
+            "fieldsToValidate"   : "#cover_amount, #premium_type, #insurance_type",
+            "validationRules"    : {
+                "cover_amount": {
+                    "required":                       true
+                },
+                "premium_type": {
+                    "required":                       true
+                },
+                "insurance_type": {
+                    "required":                       true
+                }
+            }
+        },
+        {
+            "type"               : "required",
+            "fieldsToValidate"   : "#title, #first_name_2, #last_name_2, #dob_day, #dob_month, #dob_year",
+            "validationRules"    : {
+                "title": {
+                    "required":                       true
+                },
+                "first_name_2": {
+                    "required":                       true,
+                    "minlength":                      2
+                },
+                "last_name_2": {
+                    "required":                       true,
+                    "minlength":                      2
+                },
+                "dob_day": {
+                    "required":                       true
+                },
+                "dob_month": {
+                    "required":                       true
+                },
+                "dob_year": {
+                    "required":                       true
+                }
+            }
+        },
+        {
+            "type"               : "optional",
+            "condition"          : {
+                "type": "equals",
+                "arguments": ["#cover_for", "You & Your Partner"]
+            },
+            "fieldsToValidate"   : "#partner_title, #partner_first_name, #partner_last_name, #partner_dob_day, #partner_dob_month, #partner_dob_year",
+            "validationRules"    : {
+                "partner_title": {
+                    "partnerrequired":                       true
+                },
+                "partner_first_name": {
+                    "partnerrequired":                       true,
+                    "minlength":                             2
+                },
+                "partner_last_name": {
+                    "partnerrequired":                       true,
+                    "minlength":                             2
+                },
+                "partner_dob_day": {
+                    "partnerrequired":                       true
+                },
+                "partner_dob_month": {
+                    "partnerrequired":                       true
+                },
+                "partner_dob_year": {
+                    "partnerrequired":                       true
+                }
+            }
+        },
+        {
+            "type"               : "required",
+            "fieldsToValidate"   : "#email_address_2, #uk_phone, #street_address_2, #city_2, #postal_code_2",
+            "validationRules"    : {
+                "email_address_2": {
+                    "required":                       true,
+                    "email":                          true
+                },
+                "uk_phone": {
+                    "required":                       true,
+                    "phoneStart":                     true,
+                    "phoneRepeatingAndConsecutive":   true,
+                    "phonesUKCustom":                 true
+                },
+                "street_address_2": {
+                    "required":                       true,
+                    "minlength":                      2
+                },
+                "city_2": {
+                    "required":                       true,
+                    "minlength":                      2
+                },
+                "postal_code_2": {
+                    "required":                       true,
+                    "postcodeUK":                     true
+                }
+            }
+        }
+    ]
+}

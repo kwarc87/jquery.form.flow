@@ -42,7 +42,7 @@
             var $element = plugin.$element;
             if(stepNumber === (steps.length)) {
                 //submit logic bind
-                $(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
+                $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                     e.preventDefault();
                     if(plugin.valid(step.fieldsToValidate) ) {
                         // call function before submit (this can also return promise object)
@@ -57,12 +57,14 @@
                             } else {
                                 $element.submit();
                             }
+                        } else {
+                            $element.submit();
                         }
                     }
                 });
             } else {
                 //next step bind
-                $(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+                $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                     e.preventDefault();
                     if( plugin.valid(step.fieldsToValidate) ) {
                         plugin.checkStep(stepNumber, stepNumber+1, steps);
@@ -71,7 +73,7 @@
             }
             //prev step bind
             if(stepNumber > 1) {
-                $(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+                $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                     e.preventDefault();
                     plugin.checkStep(stepNumber, stepNumber-1, steps);
                 });
@@ -101,6 +103,7 @@
         },
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
+            var $element = plugin.$element;
             if(steps[prevStepNumber-1]['callbackOnHide']) {
                 var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
                 if(settings.additionalMethods[callbackOnHide.type]) {
@@ -113,14 +116,14 @@
                     settings.additionalMethods[callbackOnShow.type].apply(this, callbackOnShow['arguments']);
                 }
             }
-            $(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
+            $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
                 if(steps[prevStepNumber-1]['callbackOnHidden']) {
                     var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
                     if(settings.additionalMethods[callbackOnHidden.type]) {
                         settings.additionalMethods[callbackOnHidden.type].apply(this, callbackOnHidden['arguments']);
                     }
                 }
-                $(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime);
+                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime);
                 plugin.setIndicator(nextStepNumber);
                 if(steps[nextStepNumber-1]['callbackOnShown']) {
                     var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
@@ -162,8 +165,9 @@
         },
         setIndicator: function(stepNumber) {
             var plugin = this;
-            $(plugin.settings.indicatorSelector).removeClass("active");
-            $(plugin.settings.indicatorSelector+":nth-child("+stepNumber+")").addClass("active");
+            var $element = plugin.$element;
+            $element.find(plugin.settings.indicatorSelector).removeClass("active");
+            $element.find(plugin.settings.indicatorSelector+":nth-child("+stepNumber+")").addClass("active");
         },
         unbindEvents: function() {
             var plugin = this;
@@ -183,9 +187,10 @@
         },
         unbindEvents: function() {
             var plugin = this;
-            $(plugin.settings.buttonNextSelector).off(plugin.buttonEvent);
-            $(plugin.settings.buttonPrevSelector).off(plugin.buttonEvent);
-            $(plugin.settings.buttonSubmitSelector).off(plugin.buttonEvent);
+            var $element = plugin.$element;
+            $element.find(plugin.settings.buttonNextSelector).off(plugin.buttonEvent);
+            $element.find(plugin.settings.buttonPrevSelector).off(plugin.buttonEvent);
+            $element.find(plugin.settings.buttonSubmitSelector).off(plugin.buttonEvent);
         },
         destroy: function() {
             var plugin = this;
@@ -205,7 +210,7 @@
             "buttonNextSelector" :          ".btn-next",
             "buttonPrevSelector" :          ".btn-prev",
             "buttonSubmitSelector" :        ".btn-submit",
-            "indicatorSelector" :           "#steps-dots li",
+            "indicatorSelector" :           ".steps-dots li",
             "animationTime" :               250
         },
         additionalMethods: {
