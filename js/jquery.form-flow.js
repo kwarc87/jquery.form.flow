@@ -154,6 +154,12 @@
                 rules: plugin.validationRules
             });
         },
+        unbindValidation: function() {
+            var plugin = this;
+            var $element = plugin.$element;
+            $element.removeData('validator');
+            $element.off('validate').off('submit');
+        },
         setIndicator: function(stepNumber) {
             var plugin = this;
             $(plugin.settings.indicatorSelector).removeClass("active");
@@ -163,8 +169,14 @@
             var plugin = this;
         },
         valid: function(fields) {
-            if (fields) {
-                return $(fields).valid();
+            var plugin = this;
+            var $element = plugin.$element;
+            if($element.data('validator')) {
+                if (fields) {
+                    return $(fields).valid();
+                } else {
+                    return true;
+                }
             } else {
                 return true;
             }
@@ -179,6 +191,7 @@
             var plugin = this;
             var $element = plugin.$element;
             plugin.unbindEvents();
+            plugin.unbindValidation();
             plugin.$element.data('plugin_formFlow', null);
         }
     }
