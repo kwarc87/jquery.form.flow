@@ -8,7 +8,7 @@
         }
     ],
     "beforeSubmit": {
-        "type": "showLoader",
+        "type": "showLoaderWithSubmitDelay",
         "arguments": [3000]
     },
     "steps":  [

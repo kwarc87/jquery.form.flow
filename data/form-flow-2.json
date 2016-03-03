@@ -2,6 +2,20 @@
     "init":  {
         "type": "initTooltip"
     },
+    "beforeSubmit": [
+        {
+            "type": "setHiddenFields"
+        },
+        {
+            "type": "setAge"
+        },
+        {
+            "type": "clearPartnersFields"
+        },
+        {
+            "type": "showLoader"
+        }
+    ],
     "steps":  [
         {
             "type"               : "required",

@@ -3,7 +3,7 @@
     /**
      * additional function for form flow plugin
      */
-    $.formFlow.addMethod('showLoader', function(timeToRedirect) {
+    $.formFlow.addMethod('showLoaderWithSubmitDelay', function(timeToRedirect) {
         var deferred = $.Deferred();
         $('#loaderModal').modal({
             backdrop: 'static',
@@ -15,6 +15,12 @@
             }, timeToRedirect);
         });
         return deferred.promise();
+    });
+    $.formFlow.addMethod('showLoader', function(timeToRedirect) {
+        $('#loaderModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
     });
     $.formFlow.addMethod('infoModal', function(message, timeToShow) {
         $('#infoModal').modal({
@@ -273,8 +279,124 @@
         });
     });
     $.formFlow.addMethod('initTooltip', function() {
-        //TODO
-        //console.log("initTooltip");
+        // tooltip
+        $(".help-icon").click(function(e){
+            e.preventDefault();
+        });
+        if (window.outerWidth > 1399) {
+            $('.help-icon-right').tooltip({
+                placement    : 'right',
+                html         : true,
+                trigger      : "hover focus click"
+            });
+            $('form .help-icon-left').tooltip({
+                placement    : 'right',
+                html         : true,
+                trigger      : "hover focus click"
+            });
+        } else {
+            $('.help-icon-right').tooltip({
+                placement    : 'right',
+                html         : true,
+                trigger      : "hover focus click"
+            });
+            $('.help-icon-left').tooltip({
+                placement    : 'left',
+                html         : true,
+                trigger      : "hover focus click"
+            });
+        }
+    });
+    $.formFlow.addMethod('setHiddenFields', function() {
+        if ($("#cover_for").val() === "You & Your Partner") {
+            $(".partner-fields").show();
+            $("#joint").val("Yes");
+            $("#partner_coverage").val("2");
+            if($("#partner_title").val() === "Mr") {
+                $("#partner_gender").val("M");
+            } else {
+                $("#partner_gender").val("F");
+            }
+        } else {
+            $(".partner-fields").hide();
+            $("#joint").val("No");
+            $("#partner_coverage").val("1");
+        }
+        if ($("#insurance_type").val() === "Life Insurance + Critical Illness") {
+            $("#with_cic").val(true);
+        } else {
+            $("#with_cic").val(false);
+        }
+        if ($("#cover_type").val() === "Level Cover") {
+            $("#cover_type_bool").val("1");
+        } else {
+            $("#cover_type_bool").val("2");
+        }
+        var months = {
+            "01" : "JAN",
+            "02" : "FEB",
+            "03" : "MAR",
+            "04" : "APR",
+            "05" : "MAY",
+            "06" : "JUN",
+            "07" : "JUL",
+            "08" : "AUG",
+            "09" : "SEP",
+            "10" : "OCT",
+            "11" : "NOV",
+            "12" : "DEC"
+        }
+        var dobMonthValue = $("#dob_month").val();
+        if(dobMonthValue) {
+            $("#dob_month_3let").val(months[dobMonthValue]);
+        }
+        var dobMonthValuePartner = $(this).val();
+        if(dobMonthValuePartner) {
+            $("#partner_dob_month_3let").val(months[dobMonthValuePartner]);
+        }
+        if( $("#premium_type").val() == "Guaranteed Premiums" ) {
+            $("#premium_type_number").val("1");
+        } else {
+            $("#premium_type_number").val("2");
+        }
+        if( $("#marketing_agreement").is(":checked") ) {
+            $("#opt_in").val("yes");
+        } else {
+            $("#opt_in").val("no");
+        }
+        if($("#title").val() === "Mr") {
+            $("#gender").val("M");
+        } else {
+            $("#gender").val("F");
+        }
+        if( !$("#uk_phone2").val() ) {
+            $("#uk_phone2").val($("#uk_phone").val());
+        }
+    });
+    $.formFlow.addMethod('calculateAge', function(year, month, day) {
+        var when = moment(year+month+day, "YYYYMMDD");
+        age = moment().diff(when, 'years');
+        return age;
+    });
+    $.formFlow.addMethod('setAge', function() {
+        var calculateAge = $.formFlow.additionalMethods.calculateAge;
+        var partnerDay = $("#partner_dob_day").val();
+        var partnerMonth = $("#partner_dob_month").val();
+        var partnerYear = $("#partner_dob_year").val();
+        var yourDay = $("#dob_day").val();
+        var yourMonth = $("#dob_month").val();
+        var yourYear = $("#dob_year").val();
+        $("#age").val( calculateAge(yourYear,yourMonth,yourDay) );
+        if ($('#cover_for').val() === "You & Your Partner") {
+            $("#partner_age").val(calculateAge(partnerYear,partnerMonth,partnerDay));
+        } else {
+            $("#partner_age").val("");
+        }
+    });
+    $.formFlow.addMethod('clearPartnersFields', function() {
+        if ($("#cover_for").val() === "You & Your Partner") {
+            $("#partner_title, #partner_first_name, #partner_last_name, #partner_dob_day, #partner_dob_month, #partner_dob_year, #partner_age, #partner_smoker, #partner_dob_month_3let"). val("");
+        }
     });
 
     /**

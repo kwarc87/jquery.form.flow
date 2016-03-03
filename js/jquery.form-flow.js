@@ -18,7 +18,7 @@
             $.getJSON( plugin.settings.jsonPath, function(data) {
                 plugin.formFlowJSON = data;
                 for (var i=0; i < data.steps.length; i++) {
-                    plugin.bindNavigate(i+1, data.steps[i], data.steps);
+                    plugin.bindNavigation(i+1, data.steps[i], data.steps);
                     plugin.addValidationRules(data.steps[i]);
                 }
                 plugin.bindValidation();
@@ -37,17 +37,36 @@
                 }
             });
         },
-        bindNavigate: function(stepNumber, step, steps) {
+        bindNavigation: function(stepNumber, step, steps) {
             var plugin = this;
             var $element = plugin.$element;
             if(stepNumber === (steps.length)) {
-                //submit logic bind
-                $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
-                    e.preventDefault();
-                    if(plugin.valid(step.fieldsToValidate) ) {
-                        // call function before submit (this can also return promise object)
-                        if(plugin.formFlowJSON.beforeSubmit) {
-                            var functionToCallOnSubmit = plugin.formFlowJSON.beforeSubmit.type;
+                plugin.bindSubmit(step);
+            } else {
+                plugin.bindNextStep(stepNumber, step, steps);
+            }
+            if(stepNumber > 1) {
+                plugin.bindPrevStep(stepNumber, step, steps);
+            }
+        },
+        bindSubmit: function(step) {
+            var plugin = this;
+            var $element = plugin.$element;
+            //submit logic bind
+            $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
+                e.preventDefault();
+                if(plugin.valid(step.fieldsToValidate) ) {
+                    // call function (single function can also return promise object) or functions before submit
+                    if(plugin.formFlowJSON.beforeSubmit) {
+                        if( Object.prototype.toString.call( plugin.formFlowJSON.beforeSubmit ) === '[object Array]' ) {
+                            for (var i=0; i < plugin.formFlowJSON.beforeSubmit.length; i++) {
+                                var functionToCallBeforeSubmit = plugin.formFlowJSON.beforeSubmit[i]['type'];
+                                var functionToCallBeforeSubmitArguments = plugin.formFlowJSON.beforeSubmit[i]['arguments'];
+                                settings.additionalMethods[functionToCallBeforeSubmit].apply(this, functionToCallBeforeSubmitArguments);
+                            }
+                            $element.submit();
+                        } else {
+                            var functionToCallOnSubmit = plugin.formFlowJSON.beforeSubmit['type'];
                             var functionToCallOnSubmitArguments = plugin.formFlowJSON.beforeSubmit.arguments;
                             var promiseBoolean = settings.additionalMethods[functionToCallOnSubmit].apply(this, functionToCallOnSubmitArguments);
                             if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
@@ -57,27 +76,30 @@
                             } else {
                                 $element.submit();
                             }
-                        } else {
-                            $element.submit();
                         }
+                    } else {
+                        $element.submit();
                     }
-                });
-            } else {
-                //next step bind
-                $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
-                    e.preventDefault();
-                    if( plugin.valid(step.fieldsToValidate) ) {
-                        plugin.checkStep(stepNumber, stepNumber+1, steps);
-                    }
-                });
-            }
-            //prev step bind
-            if(stepNumber > 1) {
-                $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
-                    e.preventDefault();
-                    plugin.checkStep(stepNumber, stepNumber-1, steps);
-                });
-            }
+                }
+            });
+        },
+        bindNextStep: function(stepNumber, step, steps) {
+            var plugin = this;
+            var $element = plugin.$element;
+            $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+                e.preventDefault();
+                if( plugin.valid(step.fieldsToValidate) ) {
+                    plugin.checkStep(stepNumber, stepNumber+1, steps);
+                }
+            });
+        },
+        bindPrevStep: function(stepNumber, step, steps) {
+            var plugin = this;
+            var $element = plugin.$element;
+            $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+                e.preventDefault();
+                plugin.checkStep(stepNumber, stepNumber-1, steps);
+            });
         },
         checkStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
@@ -104,31 +126,37 @@
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
-            if(steps[prevStepNumber-1]['callbackOnHide']) {
-                var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
-                if(settings.additionalMethods[callbackOnHide.type]) {
-                    settings.additionalMethods[callbackOnHide.type].apply(this, callbackOnHide['arguments']);
+            if(prevStepNumber < nextStepNumber) {
+                if(steps[prevStepNumber-1]['callbackOnHide']) {
+                    var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
+                    if(settings.additionalMethods[callbackOnHide.type]) {
+                        settings.additionalMethods[callbackOnHide.type].apply(this, callbackOnHide['arguments']);
+                    }
                 }
-            }
-            if(steps[nextStepNumber-1]['callbackOnShow']) {
-                var callbackOnShow = steps[nextStepNumber-1]['callbackOnShow'];
-                if(settings.additionalMethods[callbackOnShow.type]) {
-                    settings.additionalMethods[callbackOnShow.type].apply(this, callbackOnShow['arguments']);
+                if(steps[nextStepNumber-1]['callbackOnShow']) {
+                    var callbackOnShow = steps[nextStepNumber-1]['callbackOnShow'];
+                    if(settings.additionalMethods[callbackOnShow.type]) {
+                        settings.additionalMethods[callbackOnShow.type].apply(this, callbackOnShow['arguments']);
+                    }
                 }
             }
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
-                if(steps[prevStepNumber-1]['callbackOnHidden']) {
-                    var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
-                    if(settings.additionalMethods[callbackOnHidden.type]) {
-                        settings.additionalMethods[callbackOnHidden.type].apply(this, callbackOnHidden['arguments']);
+                if(prevStepNumber < nextStepNumber) {
+                    if(steps[prevStepNumber-1]['callbackOnHidden']) {
+                        var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
+                        if(settings.additionalMethods[callbackOnHidden.type]) {
+                            settings.additionalMethods[callbackOnHidden.type].apply(this, callbackOnHidden['arguments']);
+                        }
                     }
                 }
                 $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime);
                 plugin.setIndicator(nextStepNumber);
-                if(steps[nextStepNumber-1]['callbackOnShown']) {
-                    var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
-                    if(settings.additionalMethods[callbackOnShown.type]) {
-                        settings.additionalMethods[callbackOnShown.type].apply(this, callbackOnShown['arguments']);
+                if(prevStepNumber < nextStepNumber) {
+                    if(steps[nextStepNumber-1]['callbackOnShown']) {
+                        var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
+                        if(settings.additionalMethods[callbackOnShown.type]) {
+                            settings.additionalMethods[callbackOnShown.type].apply(this, callbackOnShown['arguments']);
+                        }
                     }
                 }
             });

@@ -301,6 +301,19 @@
                 <div class="col-md-6 col-md-offset-3">
                     <form id="form-example-2" method="POST" action="#">
                         <div class="standard-box">
+                            <!-- hidden fields -->
+                            <input type="hidden" name="partner_coverage" id="partner_coverage" value="1" />
+                            <input type="hidden" name="joint" id="joint" value="No" />
+                            <input type="hidden" name="with_cic" id="with_cic" value="false" />
+                            <input type="hidden" name="cover_type_bool" id="cover_type_bool" value="1" />
+                            <input type="hidden" name="dob_month_3let" id="dob_month_3let" value="JAN" />
+                            <input type="hidden" name="partner_dob_month_3let" id="partner_dob_month_3let" value="JAN" />
+                            <input type="hidden" name="premium_type_number" id="premium_type_number" value="1" />
+                            <input type="hidden" name="age" id="age" value="" />
+                            <input type="hidden" name="partner_age" id="partner_age" value="" />
+                            <input type="hidden" name="gender" id="gender" value="" />
+                            <input type="hidden" name="partner_gender" id="partner_gender" value="" />
+                            <input type="hidden" name="opt_in" id="opt_in" value="no" />
                             <h3 class="step-heading">Please Tell Us About Yourself <span class="glyphicon glyphicon-arrow-down"></span></h3>
                             <div class="step step-1" data-step="1">
                                 <div class="form-group">
@@ -1005,6 +1018,8 @@
     <script src="js/jquery.ba-throttle-debounce.min.js"></script>
     <!-- jQuery address integration -->
     <script src="js/jquery.address-integration.js" type="text/javascript"></script>
+    <!-- jQuery moment -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js" type="text/javascript"></script>
     <!-- jQuery form flow plugin -->
     <script type="text/javascript" src="js/jquery.form-flow.js"></script>
     <script type="text/javascript" src="js/additional-functions.js"></script>
