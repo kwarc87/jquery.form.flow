@@ -123,42 +123,60 @@
                 }
             }
         },
+        executeCallback: function(callback) {
+            var plugin = this;
+            if(callback && settings.additionalMethods[callback.type]) {
+                settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
+            }
+        },
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
+            //callback on hide step
+            plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHide']);
+            //callback on hide step when next step
             if(prevStepNumber < nextStepNumber) {
-                if(steps[prevStepNumber-1]['callbackOnHide']) {
-                    var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
-                    if(settings.additionalMethods[callbackOnHide.type]) {
-                        settings.additionalMethods[callbackOnHide.type].apply(this, callbackOnHide['arguments']);
-                    }
-                }
-                if(steps[nextStepNumber-1]['callbackOnShow']) {
-                    var callbackOnShow = steps[nextStepNumber-1]['callbackOnShow'];
-                    if(settings.additionalMethods[callbackOnShow.type]) {
-                        settings.additionalMethods[callbackOnShow.type].apply(this, callbackOnShow['arguments']);
-                    }
-                }
+                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHideWhenNextStep']);
+            }
+            //callback on hide shen when previous step
+            if(prevStepNumber > nextStepNumber) {
+                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHideWhenPrevStep']);
             }
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
+                //callback on hidden step
+                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHidden']);
+                //callback on hidden step when next step
                 if(prevStepNumber < nextStepNumber) {
-                    if(steps[prevStepNumber-1]['callbackOnHidden']) {
-                        var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
-                        if(settings.additionalMethods[callbackOnHidden.type]) {
-                            settings.additionalMethods[callbackOnHidden.type].apply(this, callbackOnHidden['arguments']);
-                        }
-                    }
+                    plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHiddenWhenNextStep']);
                 }
-                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime);
+                //callback on hidden step when previous step
+                if(prevStepNumber > nextStepNumber) {
+                    plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHiddenWhenPrevStep']);
+                }
+                //callback on show step
+                plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShow']);
+                //callback on show step when next step
+                if(prevStepNumber < nextStepNumber) {
+                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShowWhenNextStep']);
+                }
+                //callback on show step when previous step
+                if(prevStepNumber > nextStepNumber) {
+                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShowWhenPrevStep']);
+                }
+                //set indicator
                 plugin.setIndicator(nextStepNumber);
-                if(prevStepNumber < nextStepNumber) {
-                    if(steps[nextStepNumber-1]['callbackOnShown']) {
-                        var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
-                        if(settings.additionalMethods[callbackOnShown.type]) {
-                            settings.additionalMethods[callbackOnShown.type].apply(this, callbackOnShown['arguments']);
-                        }
+                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
+                    //callback on shown step
+                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShown']);
+                    //callback on shown step when next step
+                    if(prevStepNumber < nextStepNumber) {
+                        plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShownWhenNextStep']);
                     }
-                }
+                    //callback on shown step when previous step
+                    if(prevStepNumber > nextStepNumber) {
+                        plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShownWhenPrevStep']);
+                    }
+                });
             });
         },
         checkStepCondition: function(conditionObj) {
@@ -196,9 +214,6 @@
             var $element = plugin.$element;
             $element.find(plugin.settings.indicatorSelector).removeClass("active");
             $element.find(plugin.settings.indicatorSelector+":nth-child("+stepNumber+")").addClass("active");
-        },
-        unbindEvents: function() {
-            var plugin = this;
         },
         valid: function(fields) {
             var plugin = this;

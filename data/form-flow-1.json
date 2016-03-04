@@ -22,6 +22,7 @@
             }
         },
         {
+            "number" : 1,
             "type"               : "required",
             "fieldsToValidate"   : "#zip_code",
             "validationRules"    : {
@@ -32,12 +33,17 @@
                     "zipcodeUSGoogleMaps":            true
                 }
             },
-            "callbackOnHide"     : {
-                "type"           : "infoModal",
-                "arguments"      : ["Congratulation! You successfull fill the zip code!", 2000]
+            "callbackOnHideWhenNextStep"     : {
+                "type"                       : "infoModal",
+                "arguments"                  : ["Congratulation! You successfull fill the zip code!", 2000]
+            },
+            "callbackOnHiddenWhenPrevStep"     : {
+                "type"                       : "infoModal",
+                "arguments"                  : ["You returned to the first step!", 2000]
             }
         },
         {
+            "number" : 2,
             "type"               : "required",
             "fieldsToValidate"   : "#state",
             "validationRules"    : {
@@ -47,6 +53,7 @@
             }
         },
         {
+            "number" : 3,
             "type"               : "optional",
             "condition"          : {
                 "type": "equals",
@@ -54,15 +61,25 @@
             }
         },
         {
+            "number" : 4,
             "type"               : "required",
             "fieldsToValidate"   : "#monthly_bill",
             "validationRules"    : {
                 "monthly_bill": {
                     "required":                       true
                 }
+            },
+            "callbackOnShowWhenNextStep"     : {
+                "type"                       : "infoModal",
+                "arguments"                  : ["You are going next and now you are on power monthly bill step.", 2000]
+            },
+            "callbackOnShowWhenPrevStep"     : {
+                "type"                       : "infoModal",
+                "arguments"                  : ["You are going back and now you are on power monthly bill step.", 2000]
             }
         },
         {
+            "number" : 5,
             "type"               : "required",
             "fieldsToValidate"   : "#current_provider",
             "validationRules"    : {
@@ -72,6 +89,7 @@
             }
         },
         {
+            "number" : 6,
             "type"               : "optional",
             "fieldsToValidate"   : "#people_in_home",
             "condition"          : {
@@ -85,6 +103,7 @@
             }
         },
         {
+            "number" : 7,
             "type"               : "required",
             "fieldsToValidate"   : "#address, #city",
             "validationRules"    : {
@@ -99,6 +118,7 @@
             }
         },
         {
+            "number" : 8,
             "type"               : "submit",
             "fieldsToValidate"   : "#first_name, #last_name, #email_address, #phone_home",
             "validationRules"    : {
