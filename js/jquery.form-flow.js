@@ -9,7 +9,6 @@
         plugin.buttonEvent = plugin.settings.buttonEvent + '.' + plugin.eventPrefix;
         plugin.validationRules = {};
     }
-
     //methods
     formFlowObj.prototype = {
         //parse JSON with form flow and logic
@@ -22,20 +21,52 @@
                     plugin.addValidationRules(data.steps[i]);
                 }
                 plugin.bindValidation();
-                if(plugin.formFlowJSON.init) {
-                    if( Object.prototype.toString.call( plugin.formFlowJSON.init ) === '[object Array]' ) {
-                        for (var i=0; i < plugin.formFlowJSON.init.length; i++) {
-                            var functionToCallOnInit = plugin.formFlowJSON.init[i]['type'];
-                            var functionToCallOnInitArguments = plugin.formFlowJSON.init[i]['arguments'];
-                            settings.additionalMethods[functionToCallOnInit].apply(this, functionToCallOnInitArguments);
-                        }
+                plugin.executeCallbackInitFromJSON();
+            });
+        },
+        executeCallbackFromJSON: function(callback) {
+            var plugin = this;
+            if(callback && settings.additionalMethods[callback.type]) {
+                return settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
+            }
+        },
+        executeCallbackInitFromJSON: function() {
+            var plugin = this;
+            if(plugin.formFlowJSON.init) {
+                //check if init from JSON is an Array with callbacks or single callback
+                if( Object.prototype.toString.call( plugin.formFlowJSON.init ) === '[object Array]' ) {
+                    //execute each init callback
+                    for (var i=0; i < plugin.formFlowJSON.init.length; i++) {
+                        plugin.executeCallbackFromJSON(plugin.formFlowJSON.init[i]);
+                    }
+                } else {
+                    //execute single init callback
+                    plugin.executeCallbackFromJSON(plugin.formFlowJSON.init);
+                }
+            }
+        },
+        executeCallbackBeforeSubmitFromJSON: function() {
+            var plugin = this;
+            var $element = plugin.$element;
+            if(plugin.formFlowJSON.beforeSubmit) {
+                if( Object.prototype.toString.call( plugin.formFlowJSON['beforeSubmit'] ) === '[object Array]' ) {
+                    for (var i=0; i < plugin.formFlowJSON['beforeSubmit'].length; i++) {
+                        plugin.executeCallbackFromJSON(plugin.formFlowJSON['beforeSubmit'][i]);
+                    }
+                    $element.submit();
+                } else {
+                    var promiseBoolean = plugin.executeCallbackFromJSON(plugin.formFlowJSON['beforeSubmit']);
+                    if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
+                        promiseBoolean.then(function() {
+                            $element.submit();
+                        });
                     } else {
-                        var functionToCallOnInit = plugin.formFlowJSON.init.type;
-                        var functionToCallOnInitArguments = plugin.formFlowJSON.init.arguments;
-                        settings.additionalMethods[functionToCallOnInit].apply(this, functionToCallOnInitArguments);
+                        $element.submit();
                     }
                 }
-            });
+            } else {
+                $element.submit();
+            }
         },
         bindNavigation: function(stepNumber, step, steps) {
             var plugin = this;
@@ -56,30 +87,7 @@
             $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
                 if(plugin.valid(step.fieldsToValidate) ) {
-                    // call function (single function can also return promise object) or functions before submit
-                    if(plugin.formFlowJSON.beforeSubmit) {
-                        if( Object.prototype.toString.call( plugin.formFlowJSON.beforeSubmit ) === '[object Array]' ) {
-                            for (var i=0; i < plugin.formFlowJSON.beforeSubmit.length; i++) {
-                                var functionToCallBeforeSubmit = plugin.formFlowJSON.beforeSubmit[i]['type'];
-                                var functionToCallBeforeSubmitArguments = plugin.formFlowJSON.beforeSubmit[i]['arguments'];
-                                settings.additionalMethods[functionToCallBeforeSubmit].apply(this, functionToCallBeforeSubmitArguments);
-                            }
-                            $element.submit();
-                        } else {
-                            var functionToCallOnSubmit = plugin.formFlowJSON.beforeSubmit['type'];
-                            var functionToCallOnSubmitArguments = plugin.formFlowJSON.beforeSubmit.arguments;
-                            var promiseBoolean = settings.additionalMethods[functionToCallOnSubmit].apply(this, functionToCallOnSubmitArguments);
-                            if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
-                                promiseBoolean.then(function(){
-                                    $element.submit();
-                                });
-                            } else {
-                                $element.submit();
-                            }
-                        }
-                    } else {
-                        $element.submit();
-                    }
+                    plugin.executeCallbackBeforeSubmitFromJSON();
                 }
             });
         },
@@ -100,6 +108,16 @@
                 e.preventDefault();
                 plugin.checkStep(stepNumber, stepNumber-1, steps);
             });
+        },
+        checkStepCondition: function(conditionObj) {
+            var plugin = this;
+            //search method in settings.additionalMethods
+            if ( settings.additionalMethods[conditionObj.type] ) {
+                return settings.additionalMethods[conditionObj.type].apply(this, conditionObj.arguments);
+            } else {
+                //if cannot find given method return true
+                return true;
+            }
         },
         checkStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
@@ -123,71 +141,55 @@
                 }
             }
         },
-        executeCallback: function(callback) {
-            var plugin = this;
-            if(callback && settings.additionalMethods[callback.type]) {
-                settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
-            }
-        },
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
             //callback on hide step
-            plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHide']);
+            plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHide']);
             //callback on hide step when next step
             if(prevStepNumber < nextStepNumber) {
-                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHideWhenNextStep']);
+                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHideWhenNextStep']);
             }
             //callback on hide shen when previous step
             if(prevStepNumber > nextStepNumber) {
-                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHideWhenPrevStep']);
+                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHideWhenPrevStep']);
             }
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
                 //callback on hidden step
-                plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHidden']);
+                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHidden']);
                 //callback on hidden step when next step
                 if(prevStepNumber < nextStepNumber) {
-                    plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHiddenWhenNextStep']);
+                    plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHiddenWhenNextStep']);
                 }
                 //callback on hidden step when previous step
                 if(prevStepNumber > nextStepNumber) {
-                    plugin.executeCallback(steps[prevStepNumber-1]['callbackOnHiddenWhenPrevStep']);
+                    plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHiddenWhenPrevStep']);
                 }
                 //callback on show step
-                plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShow']);
+                plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShow']);
                 //callback on show step when next step
                 if(prevStepNumber < nextStepNumber) {
-                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShowWhenNextStep']);
+                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShowWhenNextStep']);
                 }
                 //callback on show step when previous step
                 if(prevStepNumber > nextStepNumber) {
-                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShowWhenPrevStep']);
+                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShowWhenPrevStep']);
                 }
                 //set indicator
                 plugin.setIndicator(nextStepNumber);
                 $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
                     //callback on shown step
-                    plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShown']);
+                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShown']);
                     //callback on shown step when next step
                     if(prevStepNumber < nextStepNumber) {
-                        plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShownWhenNextStep']);
+                        plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShownWhenNextStep']);
                     }
                     //callback on shown step when previous step
                     if(prevStepNumber > nextStepNumber) {
-                        plugin.executeCallback(steps[nextStepNumber-1]['callbackOnShownWhenPrevStep']);
+                        plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShownWhenPrevStep']);
                     }
                 });
             });
-        },
-        checkStepCondition: function(conditionObj) {
-            var plugin = this;
-            //search method in settings.additionalMethods
-            if ( settings.additionalMethods[conditionObj.type] ) {
-                return settings.additionalMethods[conditionObj.type].apply(this, conditionObj.arguments);
-            //if cannot find given method return true
-            } else {
-                return true;
-            }
         },
         addValidationRules: function(step) {
             var plugin = this;

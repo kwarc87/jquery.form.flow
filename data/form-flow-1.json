@@ -13,6 +13,7 @@
     },
     "steps":  [
         {
+            "id"                 : 1,
             "type"               : "required",
             "fieldsToValidate"   : "[name='homeowner']",
             "validationRules"    : {
@@ -22,7 +23,7 @@
             }
         },
         {
-            "number" : 1,
+            "id"                 : 2,
             "type"               : "required",
             "fieldsToValidate"   : "#zip_code",
             "validationRules"    : {
@@ -43,7 +44,7 @@
             }
         },
         {
-            "number" : 2,
+            "id"                 : 3,
             "type"               : "required",
             "fieldsToValidate"   : "#state",
             "validationRules"    : {
@@ -53,7 +54,7 @@
             }
         },
         {
-            "number" : 3,
+            "id"                 : 4,
             "type"               : "optional",
             "condition"          : {
                 "type": "equals",
@@ -61,7 +62,7 @@
             }
         },
         {
-            "number" : 4,
+            "id"                 : 5,
             "type"               : "required",
             "fieldsToValidate"   : "#monthly_bill",
             "validationRules"    : {
@@ -79,7 +80,7 @@
             }
         },
         {
-            "number" : 5,
+            "id"                 : 6,
             "type"               : "required",
             "fieldsToValidate"   : "#current_provider",
             "validationRules"    : {
@@ -89,7 +90,7 @@
             }
         },
         {
-            "number" : 6,
+            "id"                 : 7,
             "type"               : "optional",
             "fieldsToValidate"   : "#people_in_home",
             "condition"          : {
@@ -103,7 +104,7 @@
             }
         },
         {
-            "number" : 7,
+            "id"                 : 8,
             "type"               : "required",
             "fieldsToValidate"   : "#address, #city",
             "validationRules"    : {
@@ -118,7 +119,7 @@
             }
         },
         {
-            "number" : 8,
+            "id"                 : 9,
             "type"               : "submit",
             "fieldsToValidate"   : "#first_name, #last_name, #email_address, #phone_home",
             "validationRules"    : {

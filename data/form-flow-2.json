@@ -18,6 +18,7 @@
     ],
     "steps":  [
         {
+            "id"                 : 1,
             "type"               : "required",
             "fieldsToValidate"   : "#cover_for, #smoker, #partner_smoker, #cover_term, #cover_type",
             "validationRules"    : {
@@ -39,6 +40,7 @@
             }
         },
         {
+            "id"                 : 2,
             "type"               : "required",
             "fieldsToValidate"   : "#cover_amount, #premium_type, #insurance_type",
             "validationRules"    : {
@@ -54,6 +56,7 @@
             }
         },
         {
+            "id"                 : 3,
             "type"               : "required",
             "fieldsToValidate"   : "#title, #first_name_2, #last_name_2, #dob_day, #dob_month, #dob_year",
             "validationRules"    : {
@@ -80,6 +83,7 @@
             }
         },
         {
+            "id"                 : 4,
             "type"               : "optional",
             "condition"          : {
                 "type": "equals",
@@ -110,6 +114,7 @@
             }
         },
         {
+            "id"                 : 5,
             "type"               : "required",
             "fieldsToValidate"   : "#email_address_2, #uk_phone, #street_address_2, #city_2, #postal_code_2",
             "validationRules"    : {

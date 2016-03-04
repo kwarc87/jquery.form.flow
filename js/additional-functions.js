@@ -350,7 +350,7 @@
         if(dobMonthValue) {
             $("#dob_month_3let").val(months[dobMonthValue]);
         }
-        var dobMonthValuePartner = $(this).val();
+        var dobMonthValuePartner = $("#partner_dob_month").val();
         if(dobMonthValuePartner) {
             $("#partner_dob_month_3let").val(months[dobMonthValuePartner]);
         }
@@ -386,15 +386,15 @@
         var yourDay = $("#dob_day").val();
         var yourMonth = $("#dob_month").val();
         var yourYear = $("#dob_year").val();
-        $("#age").val( calculateAge(yourYear,yourMonth,yourDay) );
-        if ($('#cover_for').val() === "You & Your Partner") {
+        $("#age").val(calculateAge(yourYear,yourMonth,yourDay) );
+        if ($("#cover_for").val() === "You & Your Partner") {
             $("#partner_age").val(calculateAge(partnerYear,partnerMonth,partnerDay));
         } else {
             $("#partner_age").val("");
         }
     });
     $.formFlow.addMethod('clearPartnersFields', function() {
-        if ($("#cover_for").val() === "You & Your Partner") {
+        if ($("#cover_for").val() === "You") {
             $("#partner_title, #partner_first_name, #partner_last_name, #partner_dob_day, #partner_dob_month, #partner_dob_year, #partner_age, #partner_smoker, #partner_dob_month_3let"). val("");
         }
     });
