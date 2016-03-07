@@ -5,6 +5,9 @@
         },
         {
             "type": "initAddressIntegration"
+        },
+        {
+            "type": "setProvidersOnStateSelectChange"
         }
     ],
     "beforeSubmit": {

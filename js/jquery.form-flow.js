@@ -24,7 +24,14 @@
                 plugin.executeCallbackInitFromJSON();
             });
         },
-        executeCallbackFromJSON: function(callback, dir) {
+        checkIfArray: function(value) {
+            if( Object.prototype.toString.call(value) === '[object Array]' ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        executeSingleCallbackFromJSON: function(callback, dir) {
             var plugin = this;
             if(callback && settings.additionalMethods[callback.type]) {
                 return settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
@@ -34,14 +41,14 @@
             var plugin = this;
             if(plugin.formFlowJSON.init) {
                 //check if init from JSON is an Array with callbacks or single callback
-                if( Object.prototype.toString.call( plugin.formFlowJSON.init ) === '[object Array]' ) {
+                if(plugin.checkIfArray(plugin.formFlowJSON.init)) {
                     //execute each init callback
                     for (var i=0; i < plugin.formFlowJSON.init.length; i++) {
-                        plugin.executeCallbackFromJSON(plugin.formFlowJSON.init[i]);
+                        plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON.init[i]);
                     }
                 } else {
                     //execute single init callback
-                    plugin.executeCallbackFromJSON(plugin.formFlowJSON.init);
+                    plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON.init);
                 }
             }
         },
@@ -49,13 +56,13 @@
             var plugin = this;
             var $element = plugin.$element;
             if(plugin.formFlowJSON.beforeSubmit) {
-                if( Object.prototype.toString.call( plugin.formFlowJSON['beforeSubmit'] ) === '[object Array]' ) {
+                if(plugin.checkIfArray(plugin.formFlowJSON['beforeSubmit'])) {
                     for (var i=0; i < plugin.formFlowJSON['beforeSubmit'].length; i++) {
-                        plugin.executeCallbackFromJSON(plugin.formFlowJSON['beforeSubmit'][i]);
+                        plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit'][i]);
                     }
                     $element.submit();
                 } else {
-                    var promiseBoolean = plugin.executeCallbackFromJSON(plugin.formFlowJSON['beforeSubmit']);
+                    var promiseBoolean = plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit']);
                     if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
                         promiseBoolean.then(function() {
                             $element.submit();
@@ -97,7 +104,7 @@
             $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
                 if( plugin.valid(step.fieldsToValidate) ) {
-                    plugin.checkStep(stepNumber, stepNumber+1, steps);
+                    plugin.checkStepLogic(stepNumber, stepNumber+1, steps);
                 }
             });
         },
@@ -106,20 +113,10 @@
             var $element = plugin.$element;
             $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
-                plugin.checkStep(stepNumber, stepNumber-1, steps);
+                plugin.checkStepLogic(stepNumber, stepNumber-1, steps);
             });
         },
-        checkStepCondition: function(conditionObj) {
-            var plugin = this;
-            //search method in settings.additionalMethods
-            if ( settings.additionalMethods[conditionObj.type] ) {
-                return settings.additionalMethods[conditionObj.type].apply(this, conditionObj.arguments);
-            } else {
-                //if cannot find given method return true
-                return true;
-            }
-        },
-        checkStep: function(prevStepNumber, nextStepNumber, steps) {
+        checkStepLogic: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             if(steps[nextStepNumber-1]['type'] !== "optional") {
                 //switch step
@@ -133,12 +130,22 @@
                     //if condition is fail skip next step and check another step in order
                     if(prevStepNumber < nextStepNumber) {
                         //check next step in order
-                        plugin.checkStep(prevStepNumber, nextStepNumber+1, steps);
+                        plugin.checkStepLogic(prevStepNumber, nextStepNumber+1, steps);
                     } else {
                         //check previous step in order
-                        plugin.checkStep(prevStepNumber, nextStepNumber-1, steps);
+                        plugin.checkStepLogic(prevStepNumber, nextStepNumber-1, steps);
                     }
                 }
+            }
+        },
+        checkStepCondition: function(conditionObj) {
+            var plugin = this;
+            //find method in settings.additionalMethods
+            if ( settings.additionalMethods[conditionObj.type] ) {
+                return settings.additionalMethods[conditionObj.type].apply(this, conditionObj.arguments);
+            } else {
+                //if cannot find given method return true
+                return true;
             }
         },
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
@@ -150,59 +157,61 @@
             var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
             //callback on step hide
             if(callbackOnHide) {
-                plugin.executeStepCallback(callbackOnHide, prevStepNumber, nextStepNumber);
+                plugin.executeStepCallbackFromJSON(callbackOnHide, prevStepNumber, nextStepNumber);
             }
             //hide step animation
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
                 //callback on step hidden
                 if(callbackOnHidden) {
-                    plugin.executeStepCallback(callbackOnHidden, prevStepNumber, nextStepNumber);
+                    plugin.executeStepCallbackFromJSON(callbackOnHidden, prevStepNumber, nextStepNumber);
                 }
                 //callback on step show
                 if(callbackOnShow) {
-                    plugin.executeStepCallback(callbackOnShow, prevStepNumber, nextStepNumber);
+                    plugin.executeStepCallbackFromJSON(callbackOnShow, prevStepNumber, nextStepNumber);
                 }
                 //set indicator
-                plugin.setIndicator(nextStepNumber);
+                if(plugin.settings.indicatorSelector) {
+                    plugin.setIndicator(nextStepNumber);
+                }
                 //show step animation
                 $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
                     //callback on step shown
                     if(callbackOnShown) {
-                        plugin.executeStepCallback(callbackOnShown, prevStepNumber, nextStepNumber);
+                        plugin.executeStepCallbackFromJSON(callbackOnShown, prevStepNumber, nextStepNumber);
                     }
                 });
             });
         },
-        executeStepCallback: function(callback, prevStepNumber, nextStepNumber) {
+        executeStepCallbackFromJSON: function(callback, prevStepNumber, nextStepNumber) {
             var plugin = this;
             //check if step callback is an Array with callbacks or single callback
-            if( Object.prototype.toString.call(callback) === '[object Array]' ) {
+            if( plugin.checkIfArray(callback)) {
                 for (var i=0; i < callback.length; i++) {
                     //step callback in both directions (next and previous)
                     if((callback[i]['direction'] === 'both') || (!callback[i]['direction'])) {
-                        plugin.executeCallbackFromJSON(callback[i]);
+                        plugin.executeSingleCallbackFromJSON(callback[i]);
                     }
                     //step callback when next step
                     if((prevStepNumber < nextStepNumber) && (callback[i]['direction'] === 'next')) {
-                        plugin.executeCallbackFromJSON(callback[i]);
+                        plugin.executeSingleCallbackFromJSON(callback[i]);
                     }
                     //step callback when previous step
                     if((prevStepNumber > nextStepNumber) && (callback[i]['direction'] === 'prev')) {
-                        plugin.executeCallbackFromJSON(callback[i]);
+                        plugin.executeSingleCallbackFromJSON(callback[i]);
                     }
                 }
             } else {
                 //step callback in both directions (next and previous)
                 if((callback['direction'] === 'both') || (!callback['direction'])) {
-                    plugin.executeCallbackFromJSON(callback);
+                    plugin.executeSingleCallbackFromJSON(callback);
                 }
                 //step callback when next step
                 if((prevStepNumber < nextStepNumber) && (callback['direction'] === 'next')) {
-                    plugin.executeCallbackFromJSON(callback);
+                    plugin.executeSingleCallbackFromJSON(callback);
                 }
                 //step callback when previous step
                 if((prevStepNumber > nextStepNumber) && (callback['direction'] === 'prev')) {
-                    plugin.executeCallbackFromJSON(callback);
+                    plugin.executeSingleCallbackFromJSON(callback);
                 }
             }
         },
@@ -264,14 +273,14 @@
         constructor: formFlowObj,
         methods: formFlowObj.prototype,
         defaults: {
-            "jsonPath" :                    "form-flow.json",
-            "stepSelector" :                ".step",
-            "buttonEvent" :                 "click",
-            "buttonNextSelector" :          ".btn-next",
-            "buttonPrevSelector" :          ".btn-prev",
-            "buttonSubmitSelector" :        ".btn-submit",
-            "indicatorSelector" :           ".steps-dots li",
-            "animationTime" :               250
+            "jsonPath" :                    "form-flow.json", // path to JSON with form logic to parse
+            "stepSelector" :                ".step", // selector for step class
+            "buttonEvent" :                 "click", // event for navigation buttons
+            "buttonNextSelector" :          ".btn-next", // selector for next button
+            "buttonPrevSelector" :          ".btn-prev", // selector for back button
+            "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
+            "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
+            "animationTime" :               250 // animation time for step switching
         },
         additionalMethods: {
             equals: function(element, value) {

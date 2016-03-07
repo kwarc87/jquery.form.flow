@@ -34,165 +34,166 @@
             }, timeToShow);
         }
     });
-    $.formFlow.addMethod('initSlider', function() {
-        var slider = {
-            values:         [
-                {
-                    "range" : "$0-50",
-                    "desc"  : "Congrats! You’re ahead of the game. Lock in your advantage by going solar.",
-                    "color" : "light-green"
-                },
-                {
-                    "range" : "$51-100",
-                    "desc"  : "Nice! Let's see if going solar can reduce your bill even lower.",
-                    'color' : "dark-green"
-                },
-                {
-                    "range" : "$101-150",
-                    "desc"  : "You’re bill is a bit higher than average, but Solar Save could reduce your bill by at least 70%.",
-                    "color" : "yellow"
-                },
-                {
-                    "range" : "$151-200",
-                    "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
-                    "color" : "orange"
-                },
-                {
-                    "range" : "$201-300",
-                    "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
-                    "color" : "orange"
-                },
-                {
-                    "range" : "$301-400",
-                    "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
-                    "color" : "orange"
-                },
-                {
-                    "range" : "$401-500",
-                    "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
-                    "color" : "orange"
-                },
-                {
-                    "range" : "$501-600",
-                    "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
-                    "color" : "red"
-                },
-                {
-                    "range" : "$601-700",
-                    "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
-                    "color" : "red"
-                },
-                {
-                    "range" : "$701-800",
-                    "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
-                    "color" : "red"
-                },
-                {
-                    "range" : "$801",
-                    "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
-                    "color" : "red"
-                }
-            ],
-            ranges:         function(val) {
-                if (val <= 50) {
-                    return this.values[0]['range'];
-                } else if (val > 50 && val <= 100 ) {
-                    return this.values[1]['range'];
-                } else if (val > 100 && val <= 150 ) {
-                    return this.values[2]['range'];
-                } else if (val > 150 && val <= 200 ) {
-                    return this.values[3]['range'];
-                } else if (val > 200 && val <= 300 ) {
-                    return this.values[4]['range'];
-                } else if (val > 300 && val <= 400 ) {
-                    return this.values[5]['range'];
-                } else if (val > 400 && val <= 500 ) {
-                    return this.values[6]['range'];
-                } else if (val > 500 && val <= 600 ) {
-                    return this.values[7]['range'];
-                } else if (val > 600 && val <= 700 ) {
-                    return this.values[8]['range'];
-                } else if (val > 700 && val <= 800 ) {
-                    return this.values[9]['range'];
-                } else if (val > 800 ) {
-                    return this.values[10]['range'];
-                }
+    $.formFlow.addField('sliderSettings', {
+        values:         [
+            {
+                "range" : "$0-50",
+                "desc"  : "Congrats! You’re ahead of the game. Lock in your advantage by going solar.",
+                "color" : "light-green"
             },
-            description:    function(val) {
-                switch(val) {
-                    case '$0-50':
-                        return this.values[0]['desc'];
-                        break;
-                    case '$51-100':
-                        return this.values[1]['desc'];
-                        break;
-                    case '$101-150':
-                        return this.values[2]['desc'];
-                        break;
-                    case '$151-200':
-                        return this.values[3]['desc'];
-                        break;
-                    case '$201-300':
-                        return this.values[4]['desc'];
-                        break;
-                    case '$301-400':
-                        return this.values[5]['desc'];
-                        break;
-                    case '$401-500':
-                        return this.values[6]['desc'];
-                        break;
-                    case '$501-600':
-                        return this.values[7]['desc'];
-                        break;
-                    case '$601-700':
-                        return this.values[8]['desc'];
-                        break;
-                    case '$701-800':
-                        return this.values[9]['desc'];
-                        break;
-                    case '$801':
-                        return this.values[10]['desc'];
-                        break;
-                }
+            {
+                "range" : "$51-100",
+                "desc"  : "Nice! Let's see if going solar can reduce your bill even lower.",
+                'color' : "dark-green"
             },
-            color:          function(val) {
-                switch(val) {
-                    case '$0-50':
-                        return this.values[0]['color'];
-                        break;
-                    case '$51-100':
-                        return this.values[1]['color'];
-                        break;
-                    case '$101-150':
-                        return this.values[2]['color'];
-                        break;
-                    case '$151-200':
-                        return this.values[3]['color'];
-                        break;
-                    case '$201-300':
-                        return this.values[4]['color'];
-                        break;
-                    case '$301-400':
-                        return this.values[5]['color'];
-                        break;
-                    case '$401-500':
-                        return this.values[6]['color'];
-                        break;
-                    case '$501-600':
-                        return this.values[7]['color'];
-                        break;
-                    case '$601-700':
-                        return this.values[8]['color'];
-                        break;
-                    case '$701-800':
-                        return this.values[9]['color'];
-                        break;
-                    case '$801':
-                        return this.values[10]['color'];
-                        break;
-                }
+            {
+                "range" : "$101-150",
+                "desc"  : "You’re bill is a bit higher than average, but Solar Save could reduce your bill by at least 70%.",
+                "color" : "yellow"
+            },
+            {
+                "range" : "$151-200",
+                "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
+                "color" : "orange"
+            },
+            {
+                "range" : "$201-300",
+                "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
+                "color" : "orange"
+            },
+            {
+                "range" : "$301-400",
+                "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
+                "color" : "orange"
+            },
+            {
+                "range" : "$401-500",
+                "desc"  : "You’re paying a lot for electricity! Solar Save could bring your bill down by at least 70%.",
+                "color" : "orange"
+            },
+            {
+                "range" : "$501-600",
+                "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
+                "color" : "red"
+            },
+            {
+                "range" : "$601-700",
+                "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
+                "color" : "red"
+            },
+            {
+                "range" : "$701-800",
+                "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
+                "color" : "red"
+            },
+            {
+                "range" : "$801",
+                "desc"  : "Whoa! That’s a big chunk of change. Solar Save could help you lower this cost at $0 downpayment.",
+                "color" : "red"
             }
-        };
+        ],
+        ranges:         function(val) {
+            if (val <= 50) {
+                return this.values[0]['range'];
+            } else if (val > 50 && val <= 100 ) {
+                return this.values[1]['range'];
+            } else if (val > 100 && val <= 150 ) {
+                return this.values[2]['range'];
+            } else if (val > 150 && val <= 200 ) {
+                return this.values[3]['range'];
+            } else if (val > 200 && val <= 300 ) {
+                return this.values[4]['range'];
+            } else if (val > 300 && val <= 400 ) {
+                return this.values[5]['range'];
+            } else if (val > 400 && val <= 500 ) {
+                return this.values[6]['range'];
+            } else if (val > 500 && val <= 600 ) {
+                return this.values[7]['range'];
+            } else if (val > 600 && val <= 700 ) {
+                return this.values[8]['range'];
+            } else if (val > 700 && val <= 800 ) {
+                return this.values[9]['range'];
+            } else if (val > 800 ) {
+                return this.values[10]['range'];
+            }
+        },
+        description:    function(val) {
+            switch(val) {
+                case '$0-50':
+                    return this.values[0]['desc'];
+                    break;
+                case '$51-100':
+                    return this.values[1]['desc'];
+                    break;
+                case '$101-150':
+                    return this.values[2]['desc'];
+                    break;
+                case '$151-200':
+                    return this.values[3]['desc'];
+                    break;
+                case '$201-300':
+                    return this.values[4]['desc'];
+                    break;
+                case '$301-400':
+                    return this.values[5]['desc'];
+                    break;
+                case '$401-500':
+                    return this.values[6]['desc'];
+                    break;
+                case '$501-600':
+                    return this.values[7]['desc'];
+                    break;
+                case '$601-700':
+                    return this.values[8]['desc'];
+                    break;
+                case '$701-800':
+                    return this.values[9]['desc'];
+                    break;
+                case '$801':
+                    return this.values[10]['desc'];
+                    break;
+            }
+        },
+        color:          function(val) {
+            switch(val) {
+                case '$0-50':
+                    return this.values[0]['color'];
+                    break;
+                case '$51-100':
+                    return this.values[1]['color'];
+                    break;
+                case '$101-150':
+                    return this.values[2]['color'];
+                    break;
+                case '$151-200':
+                    return this.values[3]['color'];
+                    break;
+                case '$201-300':
+                    return this.values[4]['color'];
+                    break;
+                case '$301-400':
+                    return this.values[5]['color'];
+                    break;
+                case '$401-500':
+                    return this.values[6]['color'];
+                    break;
+                case '$501-600':
+                    return this.values[7]['color'];
+                    break;
+                case '$601-700':
+                    return this.values[8]['color'];
+                    break;
+                case '$701-800':
+                    return this.values[9]['color'];
+                    break;
+                case '$801':
+                    return this.values[10]['color'];
+                    break;
+            }
+        }
+    });
+    $.formFlow.addMethod('initSlider', function() {
+        var sliderSettings = $.formFlow.additionalFields.sliderSettings;
         var sliderElement = document.getElementById("monthly_bill_slider");
         noUiSlider.create(sliderElement, {
             start: 200,
@@ -206,18 +207,43 @@
             format: wNumb({
                 decimals: 0,
                 edit: function(value) {
-                    return slider.ranges(value);
+                    return sliderSettings.ranges(value);
                 }
             })
         });
         var $sliderContainer = $('#power_slider_container');
         var sliderValueElement = document.getElementById('power_slider_preview');
         sliderElement.noUiSlider.on('update', function( values, handle ) {
-            var newValue = slider.description(values[handle]);
+            var newValue = sliderSettings.description(values[handle]);
             sliderValueElement.innerHTML = newValue;
             $sliderContainer.removeClass();
-            $sliderContainer.addClass(slider.color(values[handle]));
+            $sliderContainer.addClass(sliderSettings.color(values[handle]));
             $("#monthly_bill").val(values[handle]);
+        });
+    });
+    $.formFlow.addMethod('setProvidersOnStateSelectChange', function() {
+        $("#state").on('change', function() {
+            $.formFlow.additionalMethods.setProviders();
+        });
+    });
+    $.formFlow.addMethod('setProviders', function() {
+        var url = "data/providers.json";
+        $.ajax({
+            url         : url,
+            dataType    : 'json',
+        })
+        .done(function(data) {
+            var providers = data[$("#state").val()];
+            if(providers) {
+                var providersOptions = "<option value=''>-Choose-</option>";
+                $.each(providers, function( index, value ) {
+                    providersOptions += "<option value='" + value + "'>" + value + "</option>";
+                });
+                $("#current_provider").html(providersOptions);
+            }
+        })
+        .fail(function(data) {
+            console.log('Electricity providers loading fail.');
         });
     });
     $.formFlow.addMethod('initAddressIntegration', function() {
@@ -250,24 +276,7 @@
                 $("#zip_code").valid();
                 $("#next-step-1").attr("disabled", false);
                 //set providers
-                var url = "data/providers.json";
-                $.ajax({
-                    url         : url,
-                    dataType    : 'json',
-                })
-                .done(function(data) {
-                    var providers = data[$("#state").val()];
-                    if(providers) {
-                        var providersOptions = "<option value=''>-Choose-</option>";
-                        $.each(providers, function( index, value ) {
-                            providersOptions += "<option value='" + value + "'>" + value + "</option>";
-                        });
-                        $("#current_provider").html(providersOptions);
-                    }
-                })
-                .fail(function(data) {
-                    console.log('Electricity providers loading fail.');
-                });
+                $.formFlow.additionalMethods.setProviders();
             },
             callbackError:             function(errorMessage) {
                 $("#zip_code").data('status', 'error');
