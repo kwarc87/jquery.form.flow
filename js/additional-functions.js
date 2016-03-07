@@ -3,6 +3,15 @@
     /**
      * additional function for form flow plugin
      */
+    $.formFlow.addMethod('refreshEventPixel', function(eventPixelSelector ,eventPixelParameterName, eventPixelParameterValue) {
+        var eventPixelDomain = $(eventPixelSelector).data('url');
+        var eventPixelUrl = eventPixelDomain+"?a=test&"+eventPixelParameterName+"="+eventPixelParameterValue;
+        if(eventPixelParameterName) {
+            $(eventPixelSelector).attr("src", eventPixelUrl);
+        } else {
+            $(eventPixelSelector).attr("src", "");
+        }
+    });
     $.formFlow.addMethod('showLoaderWithSubmitDelay', function(timeToRedirect) {
         var deferred = $.Deferred();
         $('#loaderModal').modal({
@@ -15,6 +24,10 @@
             }, timeToRedirect);
         });
         return deferred.promise();
+    });
+    $.formFlow.addMethod('preSubmit', function(timeToRedirect) {
+        $.formFlow.additionalMethods.refreshEventPixel("#iframe-event-pixel" ,"e", "submit");
+        return $.formFlow.additionalMethods.showLoaderWithSubmitDelay(timeToRedirect);
     });
     $.formFlow.addMethod('showLoader', function(timeToRedirect) {
         $('#loaderModal').modal({

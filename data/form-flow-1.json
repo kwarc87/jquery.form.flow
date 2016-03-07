@@ -8,10 +8,14 @@
         },
         {
             "type": "setProvidersOnStateSelectChange"
+        },
+        {
+            "type"           : "refreshEventPixel",
+            "arguments"      : ["#iframe-event-pixel" ,"e", "step1"]
         }
     ],
     "beforeSubmit": {
-        "type": "showLoaderWithSubmitDelay",
+        "type": "preSubmit",
         "arguments": [3000]
     },
     "steps":  [
@@ -23,6 +27,10 @@
                 "homeowner": {
                     "required":                       true
                 }
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step1"]
             }
         },
         {
@@ -48,7 +56,11 @@
                     "direction"                  : "prev",
                     "arguments"                  : ["You returned to the first step!", 2000]
                 }
-            ]
+            ],
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step2"]
+            }
         },
         {
             "id"                 : 3,
@@ -58,6 +70,10 @@
                 "state": {
                     "required":                       true
                 }
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step3"]
             }
         },
         {
@@ -66,6 +82,10 @@
             "condition"          : {
                 "type": "equals",
                 "arguments": ["#state", "NY"]
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step4"]
             }
         },
         {
@@ -87,6 +107,10 @@
                     "type"                       : "infoModal",
                     "direction"                  : "prev",
                     "arguments"                  : ["You are going back and now you are on power monthly bill step.", 2000]
+                },
+                {
+                    "type"           : "refreshEventPixel",
+                    "arguments"      : ["#iframe-event-pixel" ,"e", "step5"]
                 }
             ]
         },
@@ -98,6 +122,11 @@
                 "current_provider": {
                     "required":                       true
                 }
+            }
+            ,
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step6"]
             }
         },
         {
@@ -112,6 +141,10 @@
                 "people_in_home": {
                     "homeownerrequired":              true
                 }
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step7"]
             }
         },
         {
@@ -127,6 +160,10 @@
                     "required":                       true,
                     "minlength":                      2
                 }
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step8"]
             },
             "callbackOnShown" : {
                 "type"                       : "infoModal",
@@ -153,6 +190,10 @@
                 "phone_home": {
                     "required":                       true
                 }
+            },
+            "callbackOnShow" : {
+                "type"           : "refreshEventPixel",
+                "arguments"      : ["#iframe-event-pixel" ,"e", "step9"]
             }
         }
     ]

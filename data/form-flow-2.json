@@ -1,7 +1,17 @@
 {
-    "init":  {
-        "type": "initTooltip"
-    },
+    "init":  [
+        {
+            "type": "initTooltip"
+        },
+        {
+            "type": "showHideElementWhenInputValueIsEqual",
+            "arguments": ["#cover_for", "You & Your Partner", ".partner-fields"]
+        },
+        {
+            "type": "showHideElementOnInputChangeWhenValueIsEqual",
+            "arguments": ["#cover_for", "You & Your Partner", ".partner-fields"]
+        }
+    ],
     "beforeSubmit": [
         {
             "type": "setHiddenFields"

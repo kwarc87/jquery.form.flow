@@ -187,32 +187,26 @@
             //check if step callback is an Array with callbacks or single callback
             if( plugin.checkIfArray(callback)) {
                 for (var i=0; i < callback.length; i++) {
-                    //step callback in both directions (next and previous)
-                    if((callback[i]['direction'] === 'both') || (!callback[i]['direction'])) {
-                        plugin.executeSingleCallbackFromJSON(callback[i]);
-                    }
-                    //step callback when next step
-                    if((prevStepNumber < nextStepNumber) && (callback[i]['direction'] === 'next')) {
-                        plugin.executeSingleCallbackFromJSON(callback[i]);
-                    }
-                    //step callback when previous step
-                    if((prevStepNumber > nextStepNumber) && (callback[i]['direction'] === 'prev')) {
-                        plugin.executeSingleCallbackFromJSON(callback[i]);
-                    }
+                    plugin.checkCallbackDirection(callback[i], prevStepNumber, nextStepNumber);
                 }
             } else {
                 //step callback in both directions (next and previous)
-                if((callback['direction'] === 'both') || (!callback['direction'])) {
-                    plugin.executeSingleCallbackFromJSON(callback);
-                }
-                //step callback when next step
-                if((prevStepNumber < nextStepNumber) && (callback['direction'] === 'next')) {
-                    plugin.executeSingleCallbackFromJSON(callback);
-                }
-                //step callback when previous step
-                if((prevStepNumber > nextStepNumber) && (callback['direction'] === 'prev')) {
-                    plugin.executeSingleCallbackFromJSON(callback);
-                }
+                plugin.checkCallbackDirection(callback, prevStepNumber, nextStepNumber);
+            }
+        },
+        checkCallbackDirection: function(callback, prevStepNumber, nextStepNumber) {
+            var plugin = this;
+            //step callback in both directions (next and previous)
+            if((callback['direction'] === 'both') || (!callback['direction'])) {
+                plugin.executeSingleCallbackFromJSON(callback);
+            }
+            //step callback when next step
+            if((prevStepNumber < nextStepNumber) && (callback['direction'] === 'next')) {
+                plugin.executeSingleCallbackFromJSON(callback);
+            }
+            //step callback when previous step
+            if((prevStepNumber > nextStepNumber) && (callback['direction'] === 'prev')) {
+                plugin.executeSingleCallbackFromJSON(callback);
             }
         },
         addValidationRules: function(step) {
@@ -324,7 +318,23 @@
                 } else {
                     return false;
                 }
-            }
+            },
+            showHideElementWhenInputValueIsEqual: function(inputSelector, inputValueToShow, elementToShowHide) {
+                if ($(inputSelector).val() === inputValueToShow) {
+                    $(elementToShowHide).show();
+                } else {
+                    $(elementToShowHide).hide();
+                }
+            },
+            showHideElementOnInputChangeWhenValueIsEqual: function(inputSelector, inputValueToShow, elementToShowHide) {
+                $(inputSelector).on("change", function() {
+                    if ($(inputSelector).val() === inputValueToShow) {
+                        $(elementToShowHide).show();
+                    } else {
+                        $(elementToShowHide).hide();
+                    }
+                });
+            },
         },
         addMethod: function(methodName, methodBody) {
             settings.additionalMethods[methodName] = methodBody;
