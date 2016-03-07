@@ -24,7 +24,7 @@
                 plugin.executeCallbackInitFromJSON();
             });
         },
-        executeCallbackFromJSON: function(callback) {
+        executeCallbackFromJSON: function(callback, dir) {
             var plugin = this;
             if(callback && settings.additionalMethods[callback.type]) {
                 return settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
@@ -144,52 +144,67 @@
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
-            //callback on hide step
-            plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHide']);
-            //callback on hide step when next step
-            if(prevStepNumber < nextStepNumber) {
-                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHideWhenNextStep']);
+            var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
+            var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
+            var callbackOnShow = steps[nextStepNumber-1]['callbackOnShow'];
+            var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
+            //callback on step hide
+            if(callbackOnHide) {
+                plugin.executeStepCallback(callbackOnHide, prevStepNumber, nextStepNumber);
             }
-            //callback on hide shen when previous step
-            if(prevStepNumber > nextStepNumber) {
-                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHideWhenPrevStep']);
-            }
+            //hide step animation
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
-                //callback on hidden step
-                plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHidden']);
-                //callback on hidden step when next step
-                if(prevStepNumber < nextStepNumber) {
-                    plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHiddenWhenNextStep']);
+                //callback on step hidden
+                if(callbackOnHidden) {
+                    plugin.executeStepCallback(callbackOnHidden, prevStepNumber, nextStepNumber);
                 }
-                //callback on hidden step when previous step
-                if(prevStepNumber > nextStepNumber) {
-                    plugin.executeCallbackFromJSON(steps[prevStepNumber-1]['callbackOnHiddenWhenPrevStep']);
-                }
-                //callback on show step
-                plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShow']);
-                //callback on show step when next step
-                if(prevStepNumber < nextStepNumber) {
-                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShowWhenNextStep']);
-                }
-                //callback on show step when previous step
-                if(prevStepNumber > nextStepNumber) {
-                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShowWhenPrevStep']);
+                //callback on step show
+                if(callbackOnShow) {
+                    plugin.executeStepCallback(callbackOnShow, prevStepNumber, nextStepNumber);
                 }
                 //set indicator
                 plugin.setIndicator(nextStepNumber);
+                //show step animation
                 $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
-                    //callback on shown step
-                    plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShown']);
-                    //callback on shown step when next step
-                    if(prevStepNumber < nextStepNumber) {
-                        plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShownWhenNextStep']);
-                    }
-                    //callback on shown step when previous step
-                    if(prevStepNumber > nextStepNumber) {
-                        plugin.executeCallbackFromJSON(steps[nextStepNumber-1]['callbackOnShownWhenPrevStep']);
+                    //callback on step shown
+                    if(callbackOnShown) {
+                        plugin.executeStepCallback(callbackOnShown, prevStepNumber, nextStepNumber);
                     }
                 });
             });
+        },
+        executeStepCallback: function(callback, prevStepNumber, nextStepNumber) {
+            var plugin = this;
+            //check if step callback is an Array with callbacks or single callback
+            if( Object.prototype.toString.call(callback) === '[object Array]' ) {
+                for (var i=0; i < callback.length; i++) {
+                    //step callback in both directions (next and previous)
+                    if((callback[i]['direction'] === 'both') || (!callback[i]['direction'])) {
+                        plugin.executeCallbackFromJSON(callback[i]);
+                    }
+                    //step callback when next step
+                    if((prevStepNumber < nextStepNumber) && (callback[i]['direction'] === 'next')) {
+                        plugin.executeCallbackFromJSON(callback[i]);
+                    }
+                    //step callback when previous step
+                    if((prevStepNumber > nextStepNumber) && (callback[i]['direction'] === 'prev')) {
+                        plugin.executeCallbackFromJSON(callback[i]);
+                    }
+                }
+            } else {
+                //step callback in both directions (next and previous)
+                if((callback['direction'] === 'both') || (!callback['direction'])) {
+                    plugin.executeCallbackFromJSON(callback);
+                }
+                //step callback when next step
+                if((prevStepNumber < nextStepNumber) && (callback['direction'] === 'next')) {
+                    plugin.executeCallbackFromJSON(callback);
+                }
+                //step callback when previous step
+                if((prevStepNumber > nextStepNumber) && (callback['direction'] === 'prev')) {
+                    plugin.executeCallbackFromJSON(callback);
+                }
+            }
         },
         addValidationRules: function(step) {
             var plugin = this;

@@ -34,14 +34,18 @@
                     "zipcodeUSGoogleMaps":            true
                 }
             },
-            "callbackOnHideWhenNextStep"     : {
-                "type"                       : "infoModal",
-                "arguments"                  : ["Congratulation! You successfull fill the zip code!", 2000]
-            },
-            "callbackOnHiddenWhenPrevStep"     : {
-                "type"                       : "infoModal",
-                "arguments"                  : ["You returned to the first step!", 2000]
-            }
+            "callbackOnHide" : [
+                {
+                    "type"                       : "infoModal",
+                    "direction"                  : "next",
+                    "arguments"                  : ["Congratulation! You successfull fill the zip code!", 2000]
+                },
+                {
+                    "type"                       : "infoModal",
+                    "direction"                  : "prev",
+                    "arguments"                  : ["You returned to the first step!", 2000]
+                }
+            ]
         },
         {
             "id"                 : 3,
@@ -70,14 +74,18 @@
                     "required":                       true
                 }
             },
-            "callbackOnShowWhenNextStep"     : {
-                "type"                       : "infoModal",
-                "arguments"                  : ["You are going next and now you are on power monthly bill step.", 2000]
-            },
-            "callbackOnShowWhenPrevStep"     : {
-                "type"                       : "infoModal",
-                "arguments"                  : ["You are going back and now you are on power monthly bill step.", 2000]
-            }
+            "callbackOnShow" : [
+                {
+                    "type"                       : "infoModal",
+                    "direction"                  : "next",
+                    "arguments"                  : ["You are going next and now you are on power monthly bill step.", 2000]
+                },
+                {
+                    "type"                       : "infoModal",
+                    "direction"                  : "prev",
+                    "arguments"                  : ["You are going back and now you are on power monthly bill step.", 2000]
+                }
+            ]
         },
         {
             "id"                 : 6,
@@ -116,6 +124,10 @@
                     "required":                       true,
                     "minlength":                      2
                 }
+            },
+            "callbackOnShown" : {
+                "type"                       : "infoModal",
+                "arguments"                  : ["You are on address step.", 2000]
             }
         },
         {
