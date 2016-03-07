@@ -14,15 +14,23 @@
         //parse JSON with form flow and logic
         init: function() {
             var plugin = this;
-            $.getJSON( plugin.settings.jsonPath, function(data) {
-                plugin.formFlowJSON = data;
-                for (var i=0; i < data.steps.length; i++) {
-                    plugin.bindNavigation(i+1, data.steps[i], data.steps);
-                    plugin.addValidationRules(data.steps[i]);
-                }
-                plugin.bindValidation();
-                plugin.executeCallbackInitFromJSON();
-            });
+            if(typeof plugin.settings.jsonPathOrObject === 'object') {
+                plugin.parseJSON(plugin.settings.jsonPathOrObject);
+            } else {
+                $.getJSON(plugin.settings.jsonPathOrObject, function(data) {
+                    plugin.parseJSON(data);
+                });
+            }
+        },
+        parseJSON: function(JSON) {
+            var plugin = this;
+            plugin.formFlowJSON = JSON;
+            for (var i=0; i < JSON.steps.length; i++) {
+                plugin.bindNavigation(i+1, JSON.steps[i], JSON.steps);
+                plugin.addValidationRules(JSON.steps[i]);
+            }
+            plugin.bindValidation();
+            plugin.executeCallbackInitFromJSON();
         },
         checkIfArray: function(value) {
             if( Object.prototype.toString.call(value) === '[object Array]' ) {
@@ -130,10 +138,14 @@
                     //if condition is fail skip next step and check another step in order
                     if(prevStepNumber < nextStepNumber) {
                         //check next step in order
-                        plugin.checkStepLogic(prevStepNumber, nextStepNumber+1, steps);
+                        if((nextStepNumber+1) <= steps.length) {
+                            plugin.checkStepLogic(prevStepNumber, nextStepNumber+1, steps);
+                        }
                     } else {
                         //check previous step in order
-                        plugin.checkStepLogic(prevStepNumber, nextStepNumber-1, steps);
+                        if(!((nextStepNumber-1) < 1)) {
+                            plugin.checkStepLogic(prevStepNumber, nextStepNumber-1, steps);
+                        }
                     }
                 }
             }
@@ -267,7 +279,7 @@
         constructor: formFlowObj,
         methods: formFlowObj.prototype,
         defaults: {
-            "jsonPath" :                    "form-flow.json", // path to JSON with form logic to parse
+            "jsonPathOrObject" :            "form-flow.json", // path to JSON or JSON object with form logic to parse
             "stepSelector" :                ".step", // selector for step class
             "buttonEvent" :                 "click", // event for navigation buttons
             "buttonNextSelector" :          ".btn-next", // selector for next button
