@@ -24,10 +24,12 @@
     <div class="container">
         <div class="content">
             <div class="jumbotron text-center">
-                <h1 class="no-margin">Form flow plugin demo 1</h1>
+                <h1 class="no-margin">Form flow plugin demo &amp; documentation</h1>
             </div>
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6">
+                    <h3>Demo 1</h3>
+                    <hr>
                     <form id="form-example" method="POST" action="#">
                         <iframe src="about:blank" data-url="https://google.com" id="iframe-event-pixel" class="track-pixel" height="1" width="1" style="display:none;border:0;"></iframe>
                         <div class="standard-box">
@@ -294,12 +296,9 @@
                         </div>
                     </form>
                 </div>
-            </div>
-            <div class="jumbotron text-center">
-                <h1 class="no-margin">Form flow plugin demo 2</h1>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6">
+                    <h3>Demo 2</h3>
+                    <hr>
                     <form id="form-example-2" method="POST" action="#">
                         <div class="standard-box">
                             <!-- hidden fields -->
@@ -524,14 +523,14 @@
                                         </div>
                                         <div class="col-xs-8">
                                             <div class="given-name-field-container">
-                                                <label class="standard-label" for="first_name">Given Name</label>
+                                                <label class="standard-label" for="first_name_2">Given Name</label>
                                                 <input type="text" name="first_name_2" id="first_name_2" class="form-control" maxlength="30" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="standard-label" for="last_name">Last Name</label>
+                                    <label class="standard-label" for="last_name_2">Last Name</label>
                                     <input type="text" name="last_name_2" id="last_name_2" class="form-control" maxlength="30" />
                                 </div>
                                 <div class="form-group">
@@ -947,7 +946,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <a href="#" class="btn btn-warning btn-lg btn-block btn-submit" data-step="5">Get Quote Now</a>
+                                    <a href="#" class="btn btn-warning btn-lg btn-block btn-submit">Get Quote Now</a>
                                     <div class="help-block-container">
                                         <hr>
                                         <p class="help-block"> By clicking here, you agree to our <a href="#" title="Terms of service" target="_blank">Terms &amp; Conditions</a> and consent to being contacted by email and/or telephone.</p>
@@ -971,8 +970,74 @@
                     </form>
                 </div>
             </div>
+            <p><strong>Initializing:</strong></p>
+            <p>
+            <pre>$("#form-example").formFlow({
+    "jsonPathOrObject" :            "data/form-flow-1.json"
+});</pre>
+            </p>
+            <p><strong>Default Parameters:</strong></p>
+            <p>
+            <pre>defaults: {
+    "jsonPathOrObject" :            "form-flow.json", // path to JSON or JSON object with form logic to parse
+    "stepSelector" :                ".step", // selector for step class
+    "buttonEvent" :                 "click", // event for navigation buttons
+    "buttonNextSelector" :          ".btn-next", // selector for next button
+    "buttonPrevSelector" :          ".btn-prev", // selector for back button
+    "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
+    "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
+    "animationTime" :               250 // animation time for step switching
+}</pre>
+            </p>
+            <p><strong>Example HTML:</strong></p>
+            <p>
+            <pre>&lt;form id="form-example" method="POST" action="#"&gt;
+    &lt;div class="step" data-step="1"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="first_name"&gt;First Name&lt;/label&gt;
+            &lt;input type="text" name="first_name" id="first_name" class="form-control" maxlength="30" /&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="last_name"&gt;Last Name&lt;/label&gt;
+            &lt;input type="text" name="last_name" id="last_name" class="form-control" maxlength="30" /&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-default btn-next" data-step="1"&gt;Next Step&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="step" data-step="2"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-default btn-back" data-step="2"&gt;Back&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="email_address"&gt;Email Address&lt;/label&gt;
+            &lt;input type="text" name="email_address" id="email_address" class="form-control" maxlength="255"/&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-default btn-next" data-step="2"&gt;Next Step&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="step" data-step="3"&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-default btn-back" data-step="3"&gt;Back&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="uk_phone"&gt;Mobile Phone&lt;/label&gt;
+            &lt;input type="tel" name="uk_phone" id="uk_phone" class="form-control" maxlength="11"/&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-default btn-submit"&gt;Submit&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+            </p>
         </div>
     </div>
+
+    <footer class="footer">
+        <p class="text-muted text-center">&copy; 2016 Jakub Kwarciński - <a href="http://portfolio-kwarc.pl">portfolio-kwarc.pl</a> </p>
+    </footer>
+
     <div class="modal modal-loader fade" id="loaderModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -1024,6 +1089,7 @@
             });
             $("#form-example-2").formFlow({
                 "jsonPathOrObject" :                    "data/form-flow-2.json",
+                "animationTime" :                       350
             });
         });
     </script>
