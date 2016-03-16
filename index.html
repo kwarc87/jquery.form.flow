@@ -976,7 +976,7 @@
     "jsonPathOrObject" :            "data/form-flow-1.json"
 });</pre>
             </p>
-            <p><strong>Default Parameters:</strong></p>
+            <p><strong>Default parameters:</strong></p>
             <p>
             <pre>defaults: {
     "jsonPathOrObject" :            "form-flow.json", // path to JSON or JSON object with form logic to parse
@@ -991,249 +991,169 @@
             </p>
             <p><strong>JSON file fields:</strong></p>
             <p>
-                <span class="label label-success">init</span> - It is and object which keep funcion or functions to call on plugin init. Init object can be single object with function or array with objects with functions. It is an object with two fields:
+                <span class="label label-success">init</span> - It is and object which keep funcion or functions to call on plugin init. <span class="label label-success">init</span> object can be single object with function or array with objects with functions. It is an object with two fields:
             </p>
+            <ul>
+                <li>
+                    <span class="label label-default">type</span> - It accept your function name from <code>$.formFlow.additionalMethods</code> (your additional methods).<br>
+                </li>
+                <li>
+                    <span class="label label-default">arguments</span> - Array with parameters for function above (which you given in type field).
+                </li>
+            </ul>
+
+
             <p>
-                <span class="label label-default">type</span> - It accept your function name from additional methods.<br>
-            </p>
-            <p>
-                <span class="label label-default">arguments</span> - Array with parameters for function above (which you given in type field).
-            </p>
-            <p>
-                <span class="label label-success">beforeSubmit</span> - It is and object which keep funcion or functions to call before form submit. beforeSubmit object can be single object with function (also with function which returns promise object) or array with objects with functions. It is an object with the same two fields like <span class="label label-success">init</span>.
+                <span class="label label-success">beforeSubmit</span> - It is and object which keep funcion or functions to call before form submit. <span class="label label-success">beforeSubmit</span> object can be single object with function (also with function which returns promise object) or array with objects with functions. It is an object with the same two fields like <span class="label label-success">init</span>.
             </p>
             <p>
                 <span class="label label-success">steps</span> - Contains data about each step:
             </p>
-            <p>
-                <span class="label label-default">type</span> - Required or optional.
-            </p>
-            <p>If type is optional you have to give condition function from additional methods or one of the predefined function.</p>
-            <p>
-                <span class="label label-default">fieldsToValidate</span> - Fields to validate in each step.
-            </p>
-            <p>
-                <span class="label label-default">validationRules</span> - Validation rules for jQuery validate plugin.
-            </p>
+            <ul>
+                <li>
+                    <span class="label label-default">type</span> - Required or optional. If type is optional you have to give <span class="label label-default">condition</span> function from <code>$.formFlow.additionalMethods</code> or one of the predefined function.
+                </li>
+                <li>
+                    <span class="label label-default">condition</span> - function for showing optional step. If it returns true the step will be show.
+                </li>
+                <li>
+                    <span class="label label-default">fieldsToValidate</span> - Fields to validate in each step.
+                </li>
+                <li>
+                    <span class="label label-default">validationRules</span> - Validation rules for jQuery validate plugin.
+                </li>
+            </ul>
             <p>
                 <span class="label label-success">steps</span> has also 4 callbacks:
             </p>
-            <p>
-                <span class="label label-default">callbackOnShow</span>
-            </p>
-            <p>
-                <span class="label label-default">callbackOnShown</span>
-            </p>
-            <p>
-                <span class="label label-default">callbackOnHide</span>
-            </p>
-            <p>
-                <span class="label label-default">callbackOnHidden</span>
-            </p>
+            <ul>
+                <li>
+                    <span class="label label-default">callbackOnShow</span>
+                </li>
+                <li>
+                    <span class="label label-default">callbackOnShown</span>
+                </li>
+                <li>
+                    <span class="label label-default">callbackOnHide</span>
+                </li>
+                <li>
+                    <span class="label label-default">callbackOnHidden</span>
+                </li>
+            </ul>
             <p>These 4 calbacks can also accept additional field:</p>
             <p>
-                <span class="label label-default">direction</span> - It accepts values: <span class="label label-default">next</span>, <span class="label label-default">prev</span> or <span class="label label-default">both</span> (default both when you skip this field) It determines when callback should be fired (when you go forward or to come back).
+                <span class="label label-default">direction</span> - It accepts values: <span class="label label-default">next</span>, <span class="label label-default">prev</span> or <span class="label label-default">both</span> (<span class="label label-default">both</span> is also default when there is no value for <span class="label label-default">direction</span>). It determines when callback should be fired (when you go forward or backward).
             </p>
+            <p><span class="label label-default">condition</span> field accepts also one of the predefined functions:</p>
+            <ul>
+                <li>
+                    <code>equals(elementValue, value)</code> - it returns <strong>true</strong> when the <span class="label label-default">elementValue</span> is equal to given <span class="label label-default">value</span>.
+                </li>
+                <li>
+                    <code>biggerThan(elementValue, value)</code> - it returns <strong>true</strong> when the <span class="label label-default">elementValue</span> is bigger than the given <span class="label label-default">value</span>.
+                </li>
+                <li>
+                    <code>biggerOrEqualThan(elementValue, value)</code> - it returns <strong>true</strong> when the <span class="label label-default">elementValue</span> is bigger or equal than the given <span class="label label-default">value</span>.
+                </li>
+                <li>
+                    <code>smaller(elementValue, value)</code> - it returns <strong>true</strong> when the <span class="label label-default">elementValue</span> is smaller than the given <span class="label label-default">value</span>.
+                </li>
+                <li>
+                    <code>smallerOrEqualThan(elementValue, value)</code> - it returns <strong>true</strong> when the given <span class="label label-default">element</span> is checked (radio or checkbox input).
+                </li>
+                <li>
+                    <code>isChecked(element)</code> - it returns <strong>true</strong> when the <span class="label label-default">elementValue</span> is smaller or equal than the given <span class="label label-default">value</span>.
+                </li>
+            </ul>
 
-
-            <p><strong>JSON file:</strong></p>
+            <p><strong>JSON example file:</strong></p>
             <p>
             <pre>{
-    "init": [
-        {
-            "type": "initSlider"
-        },
-        {
-            "type"           : "refreshEventPixel",
-            "arguments"      : ["#iframe-event-pixel" ,"e", "step1"] //parameters for this method
-        }
-    ],
+    "init": {
+        "type":                      "initSlider"
+    },
     "beforeSubmit": {
-        "type": "showLoader",
-        "arguments": [3000]
+        "type":                      "showLoader",
+        "arguments":                 [3000]
     },
     "steps":  [
         {
-            "id"                 : 1,
-            "type"               : "required",
-            "fieldsToValidate"   : "[name='homeowner']",
-            "validationRules"    : {
-                "homeowner": {
-                    "required":                       true
+            "id"                     : 1,
+            "type"                   : "required",
+            "fieldsToValidate"       : "#zip_code",
+            "validationRules"        : {
+                "zip_code": {
+                    "required":      true
                 }
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step1"]
             }
         },
         {
-            "id"                 : 2,
-            "type"               : "required",
-            "fieldsToValidate"   : "#zip_code",
-            "validationRules"    : {
-                "zip_code": {
-                    "required":                       true
+            "id"                     : 2,
+            "type"                   : "required",
+            "fieldsToValidate"       : "#state",
+            "validationRules"        : {
+                "state": {
+                    "required":      true
                 }
             },
             "callbackOnHide" : [
                 {
-                    "type"                       : "infoModal",
-                    "direction"                  : "next",
-                    "arguments"                  : ["Congratulation! You successfull fill the zip code!", 2000]
+                    "type"           : "infoModal",
+                    "direction"      : "next",
+                    "arguments"      : ["Congratulation! You successfull choose the state!", 2000]
                 },
                 {
-                    "type"                       : "infoModal",
-                    "direction"                  : "prev",
-                    "arguments"                  : ["You returned to the first step!", 2000]
-                }
-            ],
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step2"]
-            }
-        },
-        {
-            "id"                 : 3,
-            "type"               : "required",
-            "fieldsToValidate"   : "#state",
-            "validationRules"    : {
-                "state": {
-                    "required":                       true
-                }
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step3"]
-            }
-        },
-        {
-            "id"                 : 4,
-            "type"               : "optional",
-            "condition"          : { //if type is optional you have to give your condition function from additional methods or one of the predefined function
-                "type": "equals",
-                "arguments": ["#state", "NY"]
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step4"]
-            }
-        },
-        {
-            "id"                 : 5,
-            "type"               : "required",
-            "fieldsToValidate"   : "#monthly_bill",
-            "validationRules"    : {
-                "monthly_bill": {
-                    "required":                       true
-                }
-            },
-            "callbackOnShow" : [
-                {
-                    "type"                       : "infoModal",
-                    "direction"                  : "next",
-                    "arguments"                  : ["You are going next and now you are on power monthly bill step.", 2000]
-                },
-                {
-                    "type"                       : "infoModal",
-                    "direction"                  : "prev",
-                    "arguments"                  : ["You are going back and now you are on power monthly bill step.", 2000]
-                },
-                {
-                    "type"           : "refreshEventPixel",
-                    "arguments"      : ["#iframe-event-pixel" ,"e", "step5"]
+                    "type"           : "infoModal",
+                    "direction"      : "prev",
+                    "arguments"      : ["You returned to the first step!", 2000]
                 }
             ]
         },
         {
-            "id"                 : 6,
-            "type"               : "required",
-            "fieldsToValidate"   : "#current_provider",
-            "validationRules"    : {
-                "current_provider": {
-                    "required":                       true
-                }
-            }
-            ,
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step6"]
+            "id"                     : 3,
+            "type"                   : "optional",
+            "condition"              : {
+                "type":              "equals",
+                "arguments":         ["#state", "NY"]
             }
         },
         {
-            "id"                 : 7,
-            "type"               : "optional",
-            "fieldsToValidate"   : "#people_in_home",
-            "condition"          : {
-                "type": "isChecked",
-                "arguments": ["#homeowner_1"]
-            },
-            "validationRules"    : {
-                "people_in_home": {
-                    "homeownerrequired":              true
-                }
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step7"]
-            }
-        },
-        {
-            "id"                 : 8,
-            "type"               : "required",
-            "fieldsToValidate"   : "#address, #city",
-            "validationRules"    : {
-                "address": {
-                    "required":                       true,
-                    "minlength":                      2
-                },
-                "city": {
-                    "required":                       true,
-                    "minlength":                      2
-                }
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step8"]
-            },
-            "callbackOnShown" : {
-                "type"                       : "infoModal",
-                "arguments"                  : ["You are on address step.", 2000]
-            }
-        },
-        {
-            "id"                 : 9,
-            "type"               : "submit",
-            "fieldsToValidate"   : "#first_name, #last_name, #email_address, #phone_home",
-            "validationRules"    : {
+            "id"                     : 4,
+            "type"                   : "submit",
+            "fieldsToValidate"       : "#first_name, #last_name, #address, #city, #email_address, #phone_home",
+            "validationRules"        : {
                 "first_name": {
-                    "required":                       true,
-                    "minlength":                      2
+                    "required":      true,
+                    "minlength":     2
                 },
                 "last_name": {
-                    "required":                       true,
-                    "minlength":                      2
+                    "required":      true,
+                    "minlength":     2
+                },
+                "address": {
+                    "required":      true,
+                    "minlength":     2
+                },
+                "city": {
+                    "required":      true,
+                    "minlength":     2
                 },
                 "email_address": {
-                    "required":                       true,
-                    "email":                          true
+                    "required":      true,
+                    "email":         true
                 },
                 "phone_home": {
-                    "required":                       true
+                    "required":      true
                 }
-            },
-            "callbackOnShow" : {
-                "type"           : "refreshEventPixel",
-                "arguments"      : ["#iframe-event-pixel" ,"e", "step9"]
             }
         }
     ]
 }</pre>
             </p>
             <p><strong>Additional methods:</strong></p>
-            <p>You can add your callbacks in way showed below. Next you can fire them giving their names in JSON file in specify field (for example <span class="label label-default">init</span>, <span class="label label-default">beforeSubmit</span>, <span class="label label-default">callbackOnShow</span>, <span class="label label-default">callbackOnShow,</span>, <span class="label label-default">callbackOnHide</span>), <span class="label label-default">callbackOnHidden</span> etc.</p>
+            <p>You can add your callbacks in way showed below. Next you can fire them giving their names in JSON file in specify field (for example <span class="label label-default">init</span>, <span class="label label-default">beforeSubmit</span>, <span class="label label-default">callbackOnShow</span>, <span class="label label-default">callbackOnShow,</span>, <span class="label label-default">callbackOnHide</span>, <span class="label label-default">callbackOnHidden</span> etc.).</p>
             <p>
-            <pre>$.formFlow.addMethod('refreshEventPixel', function(eventPixelSelector ,eventPixelParameterName, eventPixelParameterValue) {
+            <pre>$.formFlow.addMethod('initSlider', function(timeToRedirect) {
     //Your code goes here
 });
 $.formFlow.addMethod('showLoader', function(timeToRedirect) {
@@ -1246,259 +1166,75 @@ $.formFlow.addMethod('infoModal', function(message, timeToShow) {
             <p><strong>Example HTML:</strong></p>
             <p>
             <pre>&lt;form id="form-example" method="POST" action="#"&gt;
-    &lt;div class="step step-1" data-step="1"&gt;
+    &lt;div class="step step-1" style="display:none" data-step="1"&gt;
         &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="homeowner_1"&gt;
-                Do You Own Your Home?
-            &lt;/label&gt;
-            &lt;div class="radio"&gt;
-                &lt;label&gt;
-                    &lt;input type="radio" name="homeowner" id="homeowner_1" value="Yes" checked&gt; Yes
-                &lt;/label&gt;
-            &lt;/div&gt;
-            &lt;div class="radio"&gt;
-                &lt;label&gt;
-                    &lt;input type="radio" name="homeowner" id="homeowner_2" value="No"&gt; No
-                &lt;/label&gt;
-            &lt;/div&gt;
+            &lt;label for="zip_code"&gt;Zipcode&lt;/label&gt;
+            &lt;input type="text" class="form-control" id="zip_code" name="zip_code"&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="1"&gt;Next Step&lt;/a&gt;
+            &lt;a href="#" class="btn btn-next" data-step="1"&gt;Next Step&lt;/a&gt;
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;div class="step step-2" style="display:none" data-step="2"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="2"&gt;
-            &laquo; Back
-        &lt;/a&gt;
+        &lt;a href="#" class="btn btn-prev" data-step="2"&gt;&laquo; Back&lt;/a&gt;
         &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="zip_code"&gt;
-                Zipcode
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" id="zip_code" name="zip_code" maxlength="5" placeholder="Enter you zipcode."&gt;
+            &lt;label for="state"&gt;State&lt;/label&gt;
+            &lt;input type="text" class="form-control input-lg" id="state" name="state"&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="2"&gt;Next Step&lt;/a&gt;
+            &lt;a href="#" class="btn btn-next" data-step="2"&gt;Next Step&lt;/a&gt;
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;div class="step step-3" style="display:none" data-step="3"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="3"&gt;
-            &laquo; Back
-        &lt;/a&gt;
+        &lt;a href="#" class="btn btn-prev" data-step="3"&gt;&laquo; Back&lt;/a&gt;
         &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="state"&gt;
-                State
-            &lt;/label&gt;
-            &lt;select class="form-control input-lg" id="state" name="state"&gt;
-                &lt;option value=""&gt;- Select State -&lt;/option&gt;
-                &lt;option value="AL"&gt;Alabama&lt;/option&gt;
-                &lt;option value="AK"&gt;Alaska&lt;/option&gt;
-                &lt;option value="AZ"&gt;Arizona&lt;/option&gt;
-                &lt;option value="AR"&gt;Arkansas&lt;/option&gt;
-                &lt;option value="CA"&gt;California&lt;/option&gt;
-                &lt;option value="CO"&gt;Colorado&lt;/option&gt;
-                &lt;option value="CT"&gt;Connecticut&lt;/option&gt;
-                &lt;option value="DE"&gt;Delaware&lt;/option&gt;
-                &lt;option value="DC"&gt;District Of Columbia&lt;/option&gt;
-                &lt;option value="FL"&gt;Florida&lt;/option&gt;
-                &lt;option value="GA"&gt;Georgia&lt;/option&gt;
-                &lt;option value="HI"&gt;Hawaii&lt;/option&gt;
-                &lt;option value="ID"&gt;Idaho&lt;/option&gt;
-                &lt;option value="IL"&gt;Illinois&lt;/option&gt;
-                &lt;option value="IN"&gt;Indiana&lt;/option&gt;
-                &lt;option value="IA"&gt;Iowa&lt;/option&gt;
-                &lt;option value="KS"&gt;Kansas&lt;/option&gt;
-                &lt;option value="KY"&gt;Kentucky&lt;/option&gt;
-                &lt;option value="LA"&gt;Louisiana&lt;/option&gt;
-                &lt;option value="ME"&gt;Maine&lt;/option&gt;
-                &lt;option value="MD"&gt;Maryland&lt;/option&gt;
-                &lt;option value="MA"&gt;Massachusetts&lt;/option&gt;
-                &lt;option value="MI"&gt;Michigan&lt;/option&gt;
-                &lt;option value="MN"&gt;Minnesota&lt;/option&gt;
-                &lt;option value="MS"&gt;Mississippi&lt;/option&gt;
-                &lt;option value="MO"&gt;Missouri&lt;/option&gt;
-                &lt;option value="MT"&gt;Montana&lt;/option&gt;
-                &lt;option value="NE"&gt;Nebraska&lt;/option&gt;
-                &lt;option value="NV"&gt;Nevada&lt;/option&gt;
-                &lt;option value="NH"&gt;New Hampshire&lt;/option&gt;
-                &lt;option value="NJ"&gt;New Jersey&lt;/option&gt;
-                &lt;option value="NM"&gt;New Mexico&lt;/option&gt;
-                &lt;option value="NY"&gt;New York&lt;/option&gt;
-                &lt;option value="NC"&gt;North Carolina&lt;/option&gt;
-                &lt;option value="ND"&gt;North Dakota&lt;/option&gt;
-                &lt;option value="OH"&gt;Ohio&lt;/option&gt;
-                &lt;option value="OK"&gt;Oklahoma&lt;/option&gt;
-                &lt;option value="OR"&gt;Oregon&lt;/option&gt;
-                &lt;option value="PA"&gt;Pennsylvania&lt;/option&gt;
-                &lt;option value="RI"&gt;Rhode Island&lt;/option&gt;
-                &lt;option value="SC"&gt;South Carolina&lt;/option&gt;
-                &lt;option value="SD"&gt;South Dakota&lt;/option&gt;
-                &lt;option value="TN"&gt;Tennessee&lt;/option&gt;
-                &lt;option value="TX"&gt;Texas&lt;/option&gt;
-                &lt;option value="UT"&gt;Utah&lt;/option&gt;
-                &lt;option value="VT"&gt;Vermont&lt;/option&gt;
-                &lt;option value="VA"&gt;Virginia&lt;/option&gt;
-                &lt;option value="WA"&gt;Washington&lt;/option&gt;
-                &lt;option value="WV"&gt;West Virginia&lt;/option&gt;
-                &lt;option value="WI"&gt;Wisconsin&lt;/option&gt;
-                &lt;option value="WY"&gt;Wyoming&lt;/option&gt;
-            &lt;/select&gt;
+            &lt;h3&gt;You are from New York, great! We have a discount for you!&lt;/h3&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="3"&gt;Next Step&lt;/a&gt;
+            &lt;a href="#" class="btn btn-next" data-step="3"&gt;Next Step&lt;/a&gt;
         &lt;/div&gt;
     &lt;/div&gt;
     &lt;div class="step step-4" style="display:none" data-step="4"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="4"&gt;
-            &laquo; Back
-        &lt;/a&gt;
+        &lt;a href="#" class="btn btn-prev" data-step="4"&gt;&laquo; Back&lt;/a&gt;
         &lt;div class="form-group"&gt;
-            &lt;h3 class="no-margin"&gt;You are from New York, great! We have a discount for you!&lt;/h3&gt;
+            &lt;label class="standard-label" for="first_name"&gt;First Name&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="first_name" id="first_name"&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="4"&gt;Next Step&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="step step-5" style="display:none" data-step="5"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="5"&gt;
-            &laquo; Back
-        &lt;/a&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label"&gt;
-                About how much are you currently paying per month for your power?
-            &lt;/label&gt;
-            &lt;div id="power_slider_container"&gt;
-                &lt;div class="horizontal-slider"&gt;
-                    &lt;div id="monthly_bill_slider"&gt;&lt;/div&gt;
-                &lt;/div&gt;
-                &lt;div id="power_slider_preview"&gt;&lt;/div&gt;
-                &lt;input type="hidden" id="monthly_bill" name="monthly_bill" /&gt;
-            &lt;/div&gt;
+            &lt;label class="standard-label" for="last_name"&gt;Last Name&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="last_name" id="last_name"&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="5"&gt;Next Step&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="step step-6" style="display:none" data-step="6"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="6"&gt;
-            &laquo; Back
-        &lt;/a&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="current_provider"&gt;
-                Who is your current electricty provider?
-            &lt;/label&gt;
-            &lt;select class="form-control input-lg" id="current_provider" name="current_provider"&gt;
-                &lt;option value="SDGE"&gt;SDGE&lt;/option&gt;
-                &lt;option value="PG&amp;E"&gt;PG&amp;E&lt;/option&gt;
-                &lt;option value="SCE"&gt;SCE&lt;/option&gt;
-                &lt;option value="FP&amp;L"&gt;FP&amp;L&lt;/option&gt;
-                &lt;option value="DTE Energy"&gt;DTE Energy&lt;/option&gt;
-            &lt;/select&gt;
+            &lt;label class="standard-label" for="address"&gt;Street&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="address" id="address"&gt;
         &lt;/div&gt;
         &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="6"&gt;Next Step&lt;/a&gt;
+            &lt;label class="standard-label" for="city"&gt;City&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="city" id="city"&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="email_address"&gt;Email&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="email_address" id="email_address"&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;label class="standard-label" for="phone_home"&gt;Phone number&lt;/label&gt;
+            &lt;input type="text" class="form-control" name="phone_home" id="phone_home"&gt;
+        &lt;/div&gt;
+        &lt;div class="form-group"&gt;
+            &lt;a href="#" class="btn btn-submit"&gt;Submit &lt;/a&gt;
         &lt;/div&gt;
     &lt;/div&gt;
-    &lt;div class="step step-7" style="display:none" data-step="7"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="7"&gt;
-            &laquo; Back
-        &lt;/a&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="people_in_home"&gt;
-                How many people live in home?
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="people_in_home" id="people_in_home"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="7"&gt;Next Step&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="step step-8" style="display:none" data-step="8"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="8"&gt;
-            &laquo; Back
-        &lt;/a&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="address"&gt;
-                Street
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="address" id="address" value="test"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="city"&gt;
-                City
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="city" id="city" value="test"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-next" data-step="8"&gt;Next step&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;div class="step step-9" style="display:none" data-step="9"&gt;
-        &lt;a href="#" class="btn btn-link btn-back btn-prev" data-step="9"&gt;
-            &laquo; Back
-        &lt;/a&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="first_name"&gt;
-                First Name
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="first_name" id="first_name" value="test"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="last_name"&gt;
-                Last Name
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="last_name" id="last_name" value="test"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="email_address"&gt;
-                Email
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="email_address" id="email_address" value="johndoe@gmail.com"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;label class="standard-label" for="phone_home"&gt;
-                Phone number
-            &lt;/label&gt;
-            &lt;input type="text" class="form-control input-lg" name="phone_home" id="phone_home" maxlength="11" value="0243756978"&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;a href="#" class="btn btn-success btn-lg btn-block btn-submit"&gt;Get My Free Quote &lt;span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class="form-group"&gt;
-            &lt;div class="help-block-container"&gt;
-                &lt;p class="help-block"&gt;
-                    &lt;label&gt;
-                        By clicking "get free quote" you electronically agree to share your information with up to 5
-                        &lt;a href="#" target="_blank" title="Service Providers"&gt;Partners&lt;/a&gt;
-                        and for them to contact you (including through automated means; autodialing, text and
-                        pre-recorded messaging) via telephone, mobile device (including SMS and MMS) and/or email, even
-                        if your telephone number is currently listed on any state, federal or corporate Do Not Call list
-                        and you electronically agree to our
-                        &lt;a href="#" target="_blank" title="terms of use"&gt;terms of use&lt;/a&gt; and
-                        &lt;a href="#" target="_blank" title="Privacy Policy"&gt;Privacy Policy&lt;/a&gt;. This consent is not a condition
-                        of a purchase.
-                    &lt;/label&gt;
-                &lt;/p&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;ul class="list-inline steps-dots dots-list"&gt;
+    &lt;ul class="steps-dots"&gt;
         &lt;li class="active"&gt;
             &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
             &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
             &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
-            &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/<a href=""></a>&gt;
-        &lt;/li&gt;&lt;li&gt;
-            &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
-            &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
-            &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
-            &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
-        &lt;/li&gt;&lt;li&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
             &lt;a href="#"&gt;&lt;span class="dot"&gt;&lt;/span&gt;&lt;/a&gt;
         &lt;/li&gt;
     &lt;/ul&gt;
