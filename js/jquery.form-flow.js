@@ -114,6 +114,7 @@
             $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
                 if(plugin.valid(step.fieldsToValidate) ) {
+                    $element.find(plugin.settings.buttonSubmitSelector).attr({'disabled':'disabled'}).addClass("disabled");
                     plugin.executeCallbackBeforeSubmitFromJSON();
                 }
             });
