@@ -8,7 +8,18 @@
         plugin.eventPrefix = '.plugin_formFlow';
         plugin.buttonEvent = plugin.settings.buttonEvent + '.' + plugin.eventPrefix;
         plugin.validationRules = {};
+        plugin.validationMessages = {};
     }
+
+    //helper functions
+    var isEmpty =  function (obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+        return true;
+    }
+
     //methods
     formFlowObj.prototype = {
         //parse JSON with form flow and logic
@@ -28,6 +39,7 @@
             for (var i=0; i < JSON.steps.length; i++) {
                 plugin.bindNavigation(i+1, JSON.steps[i], JSON.steps);
                 plugin.addValidationRules(JSON.steps[i]);
+                plugin.addValidationMessages(JSON.steps[i]);
             }
             plugin.bindValidation();
             plugin.executeCallbackInitFromJSON();
@@ -227,13 +239,25 @@
                 plugin.validationRules = $.extend({}, plugin.validationRules, step.validationRules);
             }
         },
+        addValidationMessages: function(step) {
+            var plugin = this;
+            if(step.validationMessages) {
+                plugin.validationMessages = $.extend({}, plugin.validationMessages, step.validationMessages);
+            }
+        },
         bindValidation: function() {
             var plugin = this;
             var $element = plugin.$element;
-            $element.validate({
+            var validationObj = {
                 ignore: [],
                 rules: plugin.validationRules
-            });
+            };
+            console.log(plugin.validationMessages);
+            if(!isEmpty(plugin.validationMessages)) {
+                validationObj['messages'] = plugin.validationMessages;
+            }
+            console.log(validationObj);
+            $element.validate(validationObj);
         },
         unbindValidation: function() {
             var plugin = this;

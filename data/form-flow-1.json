@@ -45,6 +45,11 @@
                     "zipcodeUSGoogleMaps":            true
                 }
             },
+            "validationMessages"    : {
+                "zip_code": {
+                    "required":                       "Zipcode field is required!"
+                }
+            },
             "callbackOnHide" : [
                 {
                     "type"                       : "infoModal",
