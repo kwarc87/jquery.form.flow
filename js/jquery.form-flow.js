@@ -110,12 +110,22 @@
         bindSubmit: function(step) {
             var plugin = this;
             var $element = plugin.$element;
-            //submit logic bind
+            //submit logic bind on button click
             $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
-                if(plugin.valid(step.fieldsToValidate) ) {
-                    $element.find(plugin.settings.buttonSubmitSelector).attr({'disabled':'disabled'}).addClass("disabled");
+                if(plugin.valid(step.fieldsToValidate)) {
+                    plugin.disableButtonOnSubmit();
                     plugin.executeCallbackBeforeSubmitFromJSON();
+                }
+            });
+            //submit logic bind on enter press
+            $element.find('input').keypress(function(e) {
+                if(e.which == 13) {
+                    e.preventDefault();
+                    if(plugin.formValid()) {
+                        plugin.disableButtonOnSubmit();
+                        plugin.executeCallbackBeforeSubmitFromJSON();
+                    }
                 }
             });
         },
@@ -136,6 +146,11 @@
                 e.preventDefault();
                 plugin.checkStepLogic(stepNumber, stepNumber-1, steps);
             });
+        },
+        disableButtonOnSubmit: function() {
+            var plugin = this;
+            var $element = plugin.$element;
+            $element.find(plugin.settings.buttonSubmitSelector).attr({'disabled':'disabled'}).addClass("disabled");
         },
         checkStepLogic: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
@@ -253,11 +268,9 @@
                 ignore: [],
                 rules: plugin.validationRules
             };
-            console.log(plugin.validationMessages);
             if(!isEmpty(plugin.validationMessages)) {
                 validationObj['messages'] = plugin.validationMessages;
             }
-            console.log(validationObj);
             $element.validate(validationObj);
         },
         unbindValidation: function() {
@@ -281,6 +294,15 @@
                 } else {
                     return true;
                 }
+            } else {
+                return true;
+            }
+        },
+        formValid: function() {
+            var plugin = this;
+            var $element = plugin.$element;
+            if($element.data('validator')) {
+                return $element.valid();
             } else {
                 return true;
             }
