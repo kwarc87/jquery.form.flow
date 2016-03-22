@@ -12,24 +12,46 @@
             $(eventPixelSelector).attr("src", "");
         }
     });
-    $.formFlow.addMethod('showLoaderWithSubmitDelay', function(timeToRedirect) {
+    $.formFlow.addMethod('showLoaderModalWithSubmitDelay', function(timeToRedirect) {
         var deferred = $.Deferred();
         $('#loaderModal').modal({
             backdrop: 'static',
             keyboard: false
         });
         $('#loaderModal').on('shown.bs.modal', function (e) {
-            setTimeout(function(){
+            setTimeout(function() {
                 deferred.resolve();
             }, timeToRedirect);
         });
         return deferred.promise();
     });
-    $.formFlow.addMethod('preSubmit', function(timeToRedirect) {
-        $.formFlow.additionalMethods.refreshEventPixel("#iframe-event-pixel" ,"e", "submit");
-        return $.formFlow.additionalMethods.showLoaderWithSubmitDelay(timeToRedirect);
+    $.formFlow.addMethod('closeLoaderModal', function(timeToClose) {
+        var deferred = $.Deferred();
+        setTimeout(function() {
+            $('#loaderModal').modal('hide')
+        }, timeToClose);
+        $('#loaderModal').on('hidden.bs.modal', function (e) {
+            deferred.resolve();
+        });
+        return deferred.promise();
     });
-    $.formFlow.addMethod('showLoader', function(timeToRedirect) {
+    $.formFlow.addMethod('showInfoModalWithSubmitDelay', function(delay, timeToRedirect, message) {
+        var deferred = $.Deferred();
+        setTimeout(function() {
+            $('#infoModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            $('#infoModal .modal-body p').text(message);
+        }, delay);
+        $('#infoModal').on('shown.bs.modal', function (e) {
+            setTimeout(function() {
+                deferred.resolve();
+            }, timeToRedirect);
+        });
+        return deferred.promise();
+    });
+    $.formFlow.addMethod('showLoaderModal', function(timeToRedirect) {
         $('#loaderModal').modal({
             backdrop: 'static',
             keyboard: false

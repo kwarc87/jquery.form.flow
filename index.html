@@ -514,7 +514,7 @@
                                                 <label class="standard-label" for="title">Title</label>
                                                 <select name="title" id="title" class="form-control">
                                                     <option value=""></option>
-                                                    <option value="Mr">Mr</option>
+                                                    <option value="Mr" selected>Mr</option>
                                                     <option value="Miss">Miss</option>
                                                     <option value="Mrs">Mrs</option>
                                                     <option value="Ms">Ms</option>
@@ -524,14 +524,14 @@
                                         <div class="col-xs-8">
                                             <div class="given-name-field-container">
                                                 <label class="standard-label" for="first_name_2">Given Name</label>
-                                                <input type="text" name="first_name_2" id="first_name_2" class="form-control" maxlength="30" />
+                                                <input type="text" name="first_name_2" id="first_name_2" class="form-control" maxlength="30" value="John"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="standard-label" for="last_name_2">Last Name</label>
-                                    <input type="text" name="last_name_2" id="last_name_2" class="form-control" maxlength="30" />
+                                    <input type="text" name="last_name_2" id="last_name_2" class="form-control" maxlength="30" value="Doe"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="standard-label" for="dob_day">
@@ -926,7 +926,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="standard-label" for="street_address_2">Address First Line</label>
-                                    <input type="text" name="street_address_2" id="street_address_2" class="form-control"/>
+                                    <input type="text" name="street_address_2" id="street_address_2" class="form-control" value="Chicago"/>
                                 </div>
                                 <div class="form-group city-zip-fields">
                                     <div class="row">
@@ -1004,7 +1004,7 @@
 
 
             <p>
-                <span class="label label-success">beforeSubmit</span> - It is and object which keep funcion or functions to call before form submit. <span class="label label-success">beforeSubmit</span> object can be single object with function (also with function which returns promise object) or array with objects with functions. It is an object with the same two fields like <span class="label label-success">init</span>.
+                <span class="label label-success">beforeSubmit</span> - It is and object which keep funcion or functions to call before form submit. <span class="label label-success">beforeSubmit</span> object can be single object with function or array with objects with functions (also with promise functions). It is an object with the same two fields like <span class="label label-success">init</span> (<span class="label label-default">type</span> and <span class="label label-default">arguments</span>).
             </p>
             <p>
                 <span class="label label-success">steps</span> - Contains data about each step:
@@ -1021,6 +1021,9 @@
                 </li>
                 <li>
                     <span class="label label-default">validationRules</span> - Validation rules for jQuery validate plugin.
+                </li>
+                <li>
+                    <span class="label label-default">validationMessages</span> - Validation custom messages for for every single validator binded to specify field.
                 </li>
             </ul>
             <p>

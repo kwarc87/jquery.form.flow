@@ -14,10 +14,16 @@
             "arguments"      : ["#iframe-event-pixel" ,"e", "step1"]
         }
     ],
-    "beforeSubmit": {
-        "type": "preSubmit",
-        "arguments": [3000]
-    },
+    "beforeSubmit": [
+        {
+            "type": "showLoaderModalWithSubmitDelay",
+            "arguments": [3000]
+        },
+        {
+            "type"           : "refreshEventPixel",
+            "arguments"      : ["#iframe-event-pixel" ,"e", "submit"]
+        }
+    ],
     "steps":  [
         {
             "id"                 : 1,

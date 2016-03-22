@@ -23,8 +23,17 @@
             "type": "clearPartnersFields"
         },
         {
-            "type": "showLoader"
+            "type": "showLoaderModal"
+        },
+        {
+            "type": "closeLoaderModal",
+            "arguments": [4000]
+        },
+        {
+            "type": "showInfoModalWithSubmitDelay",
+            "arguments": [5000, 3000, "You will be redirecting after a few seconds."]
         }
+
     ],
     "steps":  [
         {

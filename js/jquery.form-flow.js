@@ -76,13 +76,31 @@
             var plugin = this;
             var $element = plugin.$element;
             if(plugin.formFlowJSON.beforeSubmit) {
+                //check if beforeSubmit from JSON is an Array with callbacks or single callback
                 if(plugin.checkIfArray(plugin.formFlowJSON['beforeSubmit'])) {
+                    var promises = [];
+                    //check all callbacks in beforeSubmit from JSON
                     for (var i=0; i < plugin.formFlowJSON['beforeSubmit'].length; i++) {
-                        plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit'][i]);
+                        var promiseBoolean = plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit'][i]);
+                        //check if one of the functions in beforeSubmit from JSON is a promise
+                        if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
+                            promises.push(promiseBoolean);
+                        } else {
+                            //check if there is no promise function and after execute all plain functions submit form
+                            if((promises.length === 0) && (i === (plugin.formFlowJSON['beforeSubmit'].length - 1))) {
+                                $element.submit();
+                            }
+                        }
                     }
-                    $element.submit();
+                    if(promises.length !== 0) {
+                        //execute all the promise functions and after all submit form
+                        $.when.apply($, promises).done(function(){
+                            $element.submit();
+                        });
+                    }
                 } else {
                     var promiseBoolean = plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit']);
+                    //check if function from beforeSubmit from JSON is a promise
                     if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
                         promiseBoolean.then(function() {
                             $element.submit();
@@ -92,6 +110,7 @@
                     }
                 }
             } else {
+                //submit form when there are no callbacks to execute in beforeSubmit from JSON
                 $element.submit();
             }
         },
