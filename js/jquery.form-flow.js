@@ -36,13 +36,13 @@
         parseJSON: function(JSON) {
             var plugin = this;
             plugin.formFlowJSON = JSON;
+            plugin.executeCallbackInitFromJSON();
             for (var i=0; i < JSON.steps.length; i++) {
                 plugin.bindNavigation(i+1, JSON.steps[i], JSON.steps);
                 plugin.addValidationRules(JSON.steps[i]);
                 plugin.addValidationMessages(JSON.steps[i]);
             }
             plugin.bindValidation();
-            plugin.executeCallbackInitFromJSON();
         },
         checkIfArray: function(value) {
             if( Object.prototype.toString.call(value) === '[object Array]' ) {
