@@ -85,11 +85,6 @@
                         //check if one of the functions in beforeSubmit from JSON is a promise
                         if( promiseBoolean && $.isFunction(promiseBoolean.then) ) {
                             promises.push(promiseBoolean);
-                        } else {
-                            //check if there is no promise function and after execute all plain functions submit form
-                            if((promises.length === 0) && (i === (plugin.formFlowJSON['beforeSubmit'].length - 1))) {
-                                $element.submit();
-                            }
                         }
                     }
                     if(promises.length !== 0) {
@@ -97,6 +92,9 @@
                         $.when.apply($, promises).done(function(){
                             $element.submit();
                         });
+                    } else {
+                        //check if there is no promise function and after execute all plain functions submit form
+                        $element.submit();
                     }
                 } else {
                     var promiseBoolean = plugin.executeSingleCallbackFromJSON(plugin.formFlowJSON['beforeSubmit']);

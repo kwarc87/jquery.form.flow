@@ -33,7 +33,6 @@
             "type": "showInfoModalWithSubmitDelay",
             "arguments": [5000, 3000, "You will be redirecting after a few seconds."]
         }
-
     ],
     "steps":  [
         {
