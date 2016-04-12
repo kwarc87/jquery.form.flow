@@ -54,7 +54,7 @@
         executeSingleCallbackFromJSON: function(callback, dir) {
             var plugin = this;
             if(callback && settings.additionalMethods[callback.type]) {
-                return settings.additionalMethods[callback.type].apply(plugin, callback['arguments']);
+                return settings.additionalMethods[callback.type].apply(plugin, callback['arguments'] || []);
             }
         },
         executeCallbackInitFromJSON: function() {
