@@ -288,6 +288,12 @@
             if(!isEmpty(plugin.validationMessages)) {
                 validationObj['messages'] = plugin.validationMessages;
             }
+            if(plugin.formFlowJSON.validationHighlight) {
+                validationObj['highlight'] = settings.additionalMethods[plugin.formFlowJSON.validationHighlight];
+            }
+            if(plugin.formFlowJSON.validationUnhighlight) {
+                validationObj['unhighlight'] = settings.additionalMethods[plugin.formFlowJSON.validationUnhighlight];
+            }
             $element.validate(validationObj);
         },
         unbindValidation: function() {
