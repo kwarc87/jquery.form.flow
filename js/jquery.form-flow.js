@@ -136,7 +136,7 @@
                 }
             });
             //submit logic bind on enter press
-            if(plugin.settings.submitOnEnter) {
+            if(plugin.settings.submitLogic === "submit") {
                 $element.find('input').keypress(function(e) {
                     if(e.which == 13) {
                         e.preventDefault();
@@ -144,6 +144,13 @@
                             plugin.disableButtonOnSubmit();
                             plugin.executeCallbackBeforeSubmitFromJSON();
                         }
+                    }
+                });
+            } else if(plugin.settings.submitLogic === "nextStep") {
+                $element.find('input').keypress(function(e) {
+                    if(e.which == 13) {
+                        e.preventDefault();
+                        $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector).trigger(plugin.buttonEvent);
                     }
                 });
             }
@@ -358,7 +365,7 @@
             "buttonPrevSelector" :          ".btn-prev", // selector for back button
             "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
             "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
-            "submitOnEnter" :               true,
+            "submitLogic" :                 "nextStep", // aloow values: nextStep, submit, false
             "animationTime" :               250 // animation time for step switching
         },
         additionalMethods: {
