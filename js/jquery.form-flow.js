@@ -150,7 +150,10 @@
                 $element.find('input').keypress(function(e) {
                     if(e.which == 13) {
                         e.preventDefault();
-                        $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector).trigger(plugin.buttonEvent);
+                        var btn = $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector);
+                        if(!btn.attr('disabled')) {
+                            btn.trigger(plugin.buttonEvent);
+                        }
                     }
                 });
             }
