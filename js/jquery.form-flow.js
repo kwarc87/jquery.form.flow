@@ -130,6 +130,7 @@
             //submit logic bind on button click
             $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
+                $element.trigger('formSubmit');
                 if(plugin.valid(step.fieldsToValidate)) {
                     plugin.disableButtonOnSubmit();
                     plugin.executeCallbackBeforeSubmitFromJSON();
@@ -140,6 +141,7 @@
                 $element.find('input').keypress(function(e) {
                     if(e.which == 13) {
                         e.preventDefault();
+                        $element.trigger('formSubmit');
                         if(plugin.formValid()) {
                             plugin.disableButtonOnSubmit();
                             plugin.executeCallbackBeforeSubmitFromJSON();
@@ -163,6 +165,7 @@
             var $element = plugin.$element;
             $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
+                $element.trigger('nextStep');
                 if( plugin.valid(step.fieldsToValidate) ) {
                     plugin.checkStepLogic(stepNumber, stepNumber+1, steps);
                 }
@@ -173,6 +176,7 @@
             var $element = plugin.$element;
             $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
+                $element.trigger('prevStep');
                 plugin.checkStepLogic(stepNumber, stepNumber-1, steps);
             });
         },
