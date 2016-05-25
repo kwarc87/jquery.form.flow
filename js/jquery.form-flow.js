@@ -301,6 +301,9 @@
                 ignore: [],
                 rules: plugin.validationRules
             };
+            if(!isEmpty(plugin.settings.validationLanguage)) {
+                validationObj['lang'] = plugin.settings.validationLanguage;
+            }
             if(!isEmpty(plugin.validationMessages)) {
                 validationObj['messages'] = plugin.validationMessages;
             }
@@ -373,6 +376,7 @@
             "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
             "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
             "submitLogic" :                 "nextStep", // aloow values: nextStep, submit, false
+            "validationLanguage" :          "en",
             "animationTime" :               250 // animation time for step switching
         },
         additionalMethods: {
