@@ -116,7 +116,7 @@
             var plugin = this;
             var $element = plugin.$element;
             if(stepNumber === (steps.length)) {
-                plugin.bindSubmit(step);
+                plugin.bindSubmit(step, steps);
             } else {
                 plugin.bindNextStep(stepNumber, step, steps);
             }
@@ -124,41 +124,31 @@
                 plugin.bindPrevStep(stepNumber, step, steps);
             }
         },
-        bindSubmit: function(step) {
+        bindSubmit: function(step, steps) {
             var plugin = this;
             var $element = plugin.$element;
             //submit logic bind on button click
             $element.find(plugin.settings.buttonSubmitSelector).on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
-                $element.trigger('formSubmit');
-                if(plugin.valid(step.fieldsToValidate)) {
+                if(plugin.formValid()) {
+                    $element.trigger('formSubmit');
                     plugin.disableButtonOnSubmit();
                     plugin.executeCallbackBeforeSubmitFromJSON();
+                } else {
+                    var stepWithFirstError = $('input.error, select.error').first().parents(plugin.settings.stepSelector).data('step');
+                    plugin.switchStep(steps.length, stepWithFirstError, steps);
                 }
             });
             //submit logic bind on enter press
-            if(plugin.settings.submitLogic === "submit") {
-                $element.find('input').keypress(function(e) {
-                    if(e.which == 13) {
-                        e.preventDefault();
-                        $element.trigger('formSubmit');
-                        if(plugin.formValid()) {
-                            plugin.disableButtonOnSubmit();
-                            plugin.executeCallbackBeforeSubmitFromJSON();
-                        }
+            $element.find('input').keypress(function(e) {
+                if(e.which == 13) {
+                    e.preventDefault();
+                    var btn = $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector);
+                    if(!btn.attr('disabled')) {
+                        btn.trigger(plugin.buttonEvent);
                     }
-                });
-            } else if(plugin.settings.submitLogic === "nextStep") {
-                $element.find('input').keypress(function(e) {
-                    if(e.which == 13) {
-                        e.preventDefault();
-                        var btn = $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector);
-                        if(!btn.attr('disabled')) {
-                            btn.trigger(plugin.buttonEvent);
-                        }
-                    }
-                });
-            }
+                }
+            });
         },
         bindNextStep: function(stepNumber, step, steps) {
             var plugin = this;
@@ -375,7 +365,6 @@
             "buttonPrevSelector" :          ".btn-prev", // selector for back button
             "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
             "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
-            "submitLogic" :                 "nextStep", // aloow values: nextStep, submit, false
             "validationLanguage" :          "en",
             "animationTime" :               250 // animation time for step switching
         },
