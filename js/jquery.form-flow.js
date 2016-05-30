@@ -135,8 +135,10 @@
                     plugin.disableButtonOnSubmit();
                     plugin.executeCallbackBeforeSubmitFromJSON();
                 } else {
-                    var stepWithFirstError = $('input.error, select.error').first().parents(plugin.settings.stepSelector).data('step');
-                    plugin.switchStep(steps.length, stepWithFirstError, steps);
+                    var stepWithFirstError = $('label.error').first().parents(plugin.settings.stepSelector).data('step');
+                    if(stepWithFirstError && stepWithFirstError !== steps.length) {
+                        plugin.switchStep(steps.length, stepWithFirstError, steps);
+                    }
                 }
             });
             //submit logic bind on enter press
