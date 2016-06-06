@@ -135,7 +135,7 @@
                     plugin.disableButtonOnSubmit();
                     plugin.executeCallbackBeforeSubmitFromJSON();
                 } else {
-                    var stepWithFirstError = $('label.error').first().parents(plugin.settings.stepSelector).data('step');
+                    var stepWithFirstError = $('label.error:not(:empty)').first().parents(plugin.settings.stepSelector).data('step');
                     if(stepWithFirstError && stepWithFirstError !== steps.length) {
                         plugin.switchStep(steps.length, stepWithFirstError, steps);
                     }
