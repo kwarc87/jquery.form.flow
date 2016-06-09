@@ -216,19 +216,35 @@
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
+            var callbackOnEveryHide = plugin.formFlowJSON.callbackOnEveryHide;
+            var callbackOnEveryHidden = plugin.formFlowJSON.callbackOnEveryHidden;
+            var callbackOnEveryShow = plugin.formFlowJSON.callbackOnEveryShow;
+            var callbackOnEveryShown = plugin.formFlowJSON.callbackOnEveryShown;
             var callbackOnHide = steps[prevStepNumber-1]['callbackOnHide'];
             var callbackOnHidden = steps[prevStepNumber-1]['callbackOnHidden'];
             var callbackOnShow = steps[nextStepNumber-1]['callbackOnShow'];
             var callbackOnShown = steps[nextStepNumber-1]['callbackOnShown'];
+            //callback on every step hide
+            if(callbackOnEveryHide) {
+                plugin.executeStepCallbackFromJSON(callbackOnEveryHide, prevStepNumber, nextStepNumber);
+            }
             //callback on step hide
             if(callbackOnHide) {
                 plugin.executeStepCallbackFromJSON(callbackOnHide, prevStepNumber, nextStepNumber);
             }
             //hide step animation
             $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
+                //callback on every step hidden
+                if(callbackOnEveryHidden) {
+                    plugin.executeStepCallbackFromJSON(callbackOnEveryHidden, prevStepNumber, nextStepNumber);
+                }
                 //callback on step hidden
                 if(callbackOnHidden) {
                     plugin.executeStepCallbackFromJSON(callbackOnHidden, prevStepNumber, nextStepNumber);
+                }
+                //callback on every step show
+                if(callbackOnEveryShow) {
+                    plugin.executeStepCallbackFromJSON(callbackOnEveryShow, prevStepNumber, nextStepNumber);
                 }
                 //callback on step show
                 if(callbackOnShow) {
@@ -240,10 +256,15 @@
                 }
                 //show step animation
                 $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
+                    //callback on every step shown
+                    if(callbackOnEveryShown) {
+                        plugin.executeStepCallbackFromJSON(callbackOnEveryShown, prevStepNumber, nextStepNumber);
+                    }
                     //callback on step shown
                     if(callbackOnShown) {
                         plugin.executeStepCallbackFromJSON(callbackOnShown, prevStepNumber, nextStepNumber);
                     }
+
                 });
             });
         },
