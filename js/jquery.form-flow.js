@@ -53,16 +53,15 @@
         },
         executeSingleCallbackFromJSON: function(callback, prevStepNumber, nextStepNumber) {
             var plugin = this;
-            var argTemp = [];
-            var arguments = [];
+            var arg = [];
             if(callback['arguments']) {
-                arguments = argTemp.concat(callback['arguments']);
+                arg = [].concat(callback['arguments']);
             }
             if(prevStepNumber && nextStepNumber) {
-                arguments.push(prevStepNumber, nextStepNumber);
+                arg.push(prevStepNumber, nextStepNumber);
             }
             if(callback && settings.additionalMethods[callback.type]) {
-                return settings.additionalMethods[callback.type].apply(plugin, arguments);
+                return settings.additionalMethods[callback.type].apply(plugin, arg);
             }
         },
         executeCallbackInitFromJSON: function() {
