@@ -14,6 +14,11 @@
             "arguments"      : ["#iframe-event-pixel" ,"e", "step1"]
         }
     ],
+    "callbackOnEveryShow" : {
+        "type": "printStepNumber",
+        "arguments": ["#form-1-header", "Step "]
+
+    },
     "beforeSubmit": [
         {
             "type": "showLoaderModalWithSubmitDelay",

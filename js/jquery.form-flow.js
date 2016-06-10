@@ -51,10 +51,18 @@
                 return false;
             }
         },
-        executeSingleCallbackFromJSON: function(callback, dir) {
+        executeSingleCallbackFromJSON: function(callback, prevStepNumber, nextStepNumber) {
             var plugin = this;
+            var argTemp = []
+            var arguments = []
+            if(callback['arguments']) {
+                arguments = argTemp.concat(callback['arguments']);
+            }
+            if(prevStepNumber && nextStepNumber) {
+                arguments.push(prevStepNumber, nextStepNumber);
+            }
             if(callback && settings.additionalMethods[callback.type]) {
-                return settings.additionalMethods[callback.type].apply(plugin, callback['arguments'] || []);
+                return settings.additionalMethods[callback.type].apply(plugin, arguments);
             }
         },
         executeCallbackInitFromJSON: function() {
@@ -284,15 +292,15 @@
             var plugin = this;
             //step callback in both directions (next and previous)
             if((callback['direction'] === 'both') || (!callback['direction'])) {
-                plugin.executeSingleCallbackFromJSON(callback);
+                plugin.executeSingleCallbackFromJSON(callback, prevStepNumber, nextStepNumber);
             }
             //step callback when next step
             if((prevStepNumber < nextStepNumber) && (callback['direction'] === 'next')) {
-                plugin.executeSingleCallbackFromJSON(callback);
+                plugin.executeSingleCallbackFromJSON(callback, prevStepNumber, nextStepNumber);
             }
             //step callback when previous step
             if((prevStepNumber > nextStepNumber) && (callback['direction'] === 'prev')) {
-                plugin.executeSingleCallbackFromJSON(callback);
+                plugin.executeSingleCallbackFromJSON(callback, prevStepNumber, nextStepNumber);
             }
         },
         addValidationRules: function(step) {

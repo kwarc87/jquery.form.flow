@@ -69,6 +69,9 @@
             }, timeToShow);
         }
     });
+    $.formFlow.addMethod('printStepNumber', function(headerSelector, headerText, prevStepNumber, nextStepNumber) {
+        $(headerSelector).text(headerText+nextStepNumber);
+    });
     $.formFlow.addField('sliderSettings', {
         values:         [
             {
