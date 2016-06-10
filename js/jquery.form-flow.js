@@ -5,7 +5,7 @@
         var plugin = this;
         plugin.settings = $.extend({}, settings.defaults, options);
         plugin.$element = $(element);
-        plugin.eventPrefix = '.plugin_formFlow';
+        plugin.eventPrefix = 'plugin_formFlow';
         plugin.buttonEvent = plugin.settings.buttonEvent + '.' + plugin.eventPrefix;
         plugin.validationRules = {};
         plugin.validationMessages = {};
@@ -53,8 +53,8 @@
         },
         executeSingleCallbackFromJSON: function(callback, prevStepNumber, nextStepNumber) {
             var plugin = this;
-            var argTemp = []
-            var arguments = []
+            var argTemp = [];
+            var arguments = [];
             if(callback['arguments']) {
                 arguments = argTemp.concat(callback['arguments']);
             }
