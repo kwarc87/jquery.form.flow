@@ -96,7 +96,7 @@
                     }
                     if(promises.length !== 0) {
                         //execute all the promise functions and after all submit form
-                        $.when.apply($, promises).done(function(){
+                        $.when.apply($, promises).done(function() {
                             $element.submit();
                         });
                     } else {
@@ -262,7 +262,7 @@
                     plugin.setIndicator(nextStepNumber);
                 }
                 //show step animation
-                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function(){
+                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function() {
                     //callback on every step shown
                     if(callbackOnEveryShown) {
                         plugin.executeStepCallbackFromJSON(callbackOnEveryShown, prevStepNumber, nextStepNumber);
@@ -271,7 +271,6 @@
                     if(callbackOnShown) {
                         plugin.executeStepCallbackFromJSON(callbackOnShown, prevStepNumber, nextStepNumber);
                     }
-
                 });
             });
         },
@@ -395,7 +394,7 @@
             "buttonPrevSelector" :          ".btn-prev", // selector for back button
             "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
             "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
-            "validationLanguage" :          "en",
+            "validationLanguage" :          "en", // jQuery validation messages language
             "animationTime" :               250 // animation time for step switching
         },
         additionalMethods: {
