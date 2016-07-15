@@ -153,7 +153,7 @@
                 if(e.which == 13) {
                     e.preventDefault();
                     var btn = $(this).parents(plugin.settings.stepSelector).find(plugin.settings.buttonNextSelector+", "+plugin.settings.buttonSubmitSelector);
-                    if(!btn.attr('disabled')) {
+                    if(!btn.attr('disabled') && !btn.hasClass('disabled')) {
                         btn.trigger(plugin.buttonEvent);
                     }
                 }
@@ -162,7 +162,7 @@
         bindNextStep: function(stepNumber, step, steps) {
             var plugin = this;
             var $element = plugin.$element;
-            $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+            $element.find(plugin.settings.buttonNextSelector+"[data-step='"+stepNumber+"']:not('.disabled')").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
                 $element.trigger('nextStep');
                 if( plugin.valid(step.fieldsToValidate) ) {
@@ -173,7 +173,7 @@
         bindPrevStep: function(stepNumber, step, steps) {
             var plugin = this;
             var $element = plugin.$element;
-            $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']").on(plugin.buttonEvent, function(e) {
+            $element.find(plugin.settings.buttonPrevSelector+"[data-step='"+stepNumber+"']:not('.disabled')").on(plugin.buttonEvent, function(e) {
                 e.preventDefault();
                 $element.trigger('prevStep');
                 plugin.checkStepLogic(stepNumber, stepNumber-1, steps);
