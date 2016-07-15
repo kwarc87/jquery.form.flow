@@ -25,12 +25,17 @@
         //parse JSON with form flow and logic
         init: function() {
             var plugin = this;
+            var $element = plugin.$element;
             if(typeof plugin.settings.jsonPathOrObject === 'object') {
                 plugin.parseJSON(plugin.settings.jsonPathOrObject);
             } else {
                 $.getJSON(plugin.settings.jsonPathOrObject, function(data) {
                     plugin.parseJSON(data);
                 });
+            }
+            if(plugin.settings.focusOnStepFirstElement) {
+                var $firstStep = $element.find(plugin.settings.stepSelector+"[data-step='1']");
+                $firstStep.find("input:not(:disabled, [type=hidden]), select:not(:disabled, [type=hidden]), textarea:not(:disabled, [type=hidden])").first().focus();
             }
         },
         parseJSON: function(JSON) {
@@ -223,6 +228,8 @@
         switchStep: function(prevStepNumber, nextStepNumber, steps) {
             var plugin = this;
             var $element = plugin.$element;
+            var $prevStep = $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']");
+            var $nextStep = $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']");
             var callbackOnEveryHide = plugin.formFlowJSON.callbackOnEveryHide;
             var callbackOnEveryHidden = plugin.formFlowJSON.callbackOnEveryHidden;
             var callbackOnEveryShow = plugin.formFlowJSON.callbackOnEveryShow;
@@ -240,7 +247,7 @@
                 plugin.executeStepCallbackFromJSON(callbackOnHide, prevStepNumber, nextStepNumber);
             }
             //hide step animation
-            $element.find(plugin.settings.stepSelector+"[data-step='"+prevStepNumber+"']").fadeOut(plugin.settings.animationTime, function() {
+            $prevStep.fadeOut(plugin.settings.animationTime, function() {
                 //callback on every step hidden
                 if(callbackOnEveryHidden) {
                     plugin.executeStepCallbackFromJSON(callbackOnEveryHidden, prevStepNumber, nextStepNumber);
@@ -262,7 +269,7 @@
                     plugin.setIndicator(nextStepNumber);
                 }
                 //show step animation
-                $element.find(plugin.settings.stepSelector+"[data-step='"+nextStepNumber+"']").fadeIn(plugin.settings.animationTime, function() {
+                $nextStep.fadeIn(plugin.settings.animationTime, function() {
                     //callback on every step shown
                     if(callbackOnEveryShown) {
                         plugin.executeStepCallbackFromJSON(callbackOnEveryShown, prevStepNumber, nextStepNumber);
@@ -270,6 +277,9 @@
                     //callback on step shown
                     if(callbackOnShown) {
                         plugin.executeStepCallbackFromJSON(callbackOnShown, prevStepNumber, nextStepNumber);
+                    }
+                    if(plugin.settings.focusOnStepFirstElement) {
+                        $nextStep.find("input:not(:disabled, [type=hidden]), select:not(:disabled, [type=hidden]), textarea:not(:disabled, [type=hidden])").first().focus();
                     }
                 });
             });
@@ -394,6 +404,7 @@
             "buttonPrevSelector" :          ".btn-prev", // selector for back button
             "buttonSubmitSelector" :        ".btn-submit", // selector for button submit
             "indicatorSelector" :           ".steps-dots li", // selector for indicator, can be set to false
+            "focusOnStepFirstElement" :     false, //if true first input/select/textarea in step are focused
             "validationLanguage" :          "en", // jQuery validation messages language
             "animationTime" :               250 // animation time for step switching
         },
